@@ -1,19 +1,51 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+// ModulePage — lazy loads the correct module by ID
+import React, { Suspense, lazy } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ALL_MODULES } from '@/modules/moduleConfigs';
-import ModuleShell from '@/components/layout/ModuleShell/ModuleShell';
+
+const MODULE_MAP: Record<string, React.LazyExoticComponent<React.FC>> = {
+  m01: lazy(() => import('@/modules/m01-intro')),
+  // m02–m10 added as modules are built
+};
+
+const LoadingScreen = () => (
+  <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Heebo,sans-serif', color:'#9CA3AF', fontSize:18 }} dir="rtl">
+    טוען יחידה...
+  </div>
+);
+
+const NotAvailable: React.FC<{ title: string }> = ({ title }) => {
+  const nav = useNavigate();
+  return (
+    <div style={{ minHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', fontFamily:'Heebo,sans-serif', gap:16, background:'#FAF3F4' }} dir="rtl">
+      <div style={{ fontSize:64 }}>🔒</div>
+      <h1 style={{ fontSize:24, color:'#1E2430', fontFamily:'Frank Ruhl Libre,serif' }}>{title}</h1>
+      <p style={{ color:'#6B7280' }}>יחידה זו עדיין בפיתוח. חזרו בקרוב!</p>
+      <button
+        onClick={() => nav('/')}
+        style={{ background:'#DE00A5', color:'white', border:'none', borderRadius:8, padding:'12px 28px', fontSize:16, cursor:'pointer', fontFamily:'Heebo,sans-serif', fontWeight:700 }}
+      >
+        חזרה לפורטל
+      </button>
+    </div>
+  );
+};
 
 const ModulePage: React.FC = () => {
   const { moduleId } = useParams<{ moduleId: string }>();
   const config = ALL_MODULES.find(m => m.id === moduleId);
-  if (!config) return <div dir="rtl" style={{padding:40}}>יחידה לא נמצאה</div>;
+
+  if (!config) return <NotAvailable title="יחידה לא נמצאה" />;
+  if (!config.isAvailable) return <NotAvailable title={config.titleHe} />;
+
+  const ModuleComponent = MODULE_MAP[moduleId!];
+  if (!ModuleComponent) return <NotAvailable title={config.titleHe} />;
+
   return (
-    <ModuleShell config={config}>
-      <div style={{padding:40, direction:'rtl'}}>
-        <h1>{config.titleHe}</h1>
-        <p>יחידה {config.number} — בפיתוח</p>
-      </div>
-    </ModuleShell>
+    <Suspense fallback={<LoadingScreen />}>
+      <ModuleComponent />
+    </Suspense>
   );
 };
+
 export default ModulePage;

@@ -1,251 +1,226 @@
-// ═══════════════════════════════════════════════════════
-// PortalHome.module.scss
-// ═══════════════════════════════════════════════════════
 @use '@/styles/tokens' as *;
 @use '@/styles/mixins' as *;
 
-.page {
-  min-height: 100vh;
-}
+// Portal hero uses the gradient image
+.page { min-height: 100vh; background: #FAF3F4; }
 
 // ── HERO ──────────────────────────────────────────────
 .hero {
-  background: $gray-900;
   position: relative;
   overflow: hidden;
-  padding: $space-20 0 $space-16;
-
-  @include respond-to(md) { padding: $space-12 0 $space-10; }
-}
-
-.heroGrid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
+  padding: 88px 0 80px;
+  background:
+    radial-gradient(circle at 15% 20%, #D7D1E9 0%, transparent 35%),
+    radial-gradient(circle at 55% 20%, #F6E1F3 0%, transparent 40%),
+    radial-gradient(circle at 75% 85%, #FCEAE2 0%, transparent 45%),
+    #FAF3F4;
+  @include respond-to(md) { padding: 60px 0 52px; }
 }
 
 .heroInner {
   position: relative;
   z-index: 1;
-  max-width: 860px;
+  max-width: 680px;
   margin: 0 auto;
   padding: 0 $space-6;
   text-align: center;
+  @include respond-to(sm) { padding: 0 $space-4; }
 }
 
-.heroTag {
+.heroEyebrow {
   display: inline-block;
-  border: 1px solid rgba($brand-accent, 0.5);
-  color: $brand-accent;
+  background: rgba(#DE00A5, 0.10);
+  color: #9F1C81;
   font-size: $text-sm;
-  letter-spacing: 1px;
-  padding: $space-1 $space-5;
+  font-weight: $weight-medium;
+  padding: 6px 18px;
   border-radius: $radius-full;
-  margin-bottom: $space-6;
+  margin-bottom: $space-5;
+  border: 1px solid rgba(#DE00A5, 0.20);
 }
 
 .heroTitle {
   font-family: $font-serif;
-  font-size: 80px;
-  line-height: 1;
+  font-size: 92px;
   font-weight: $weight-black;
-  margin-bottom: $space-4;
-  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: $space-3;
+  letter-spacing: -3px;
+  @include respond-to(md) { font-size: 64px; }
+  @include respond-to(sm) { font-size: 48px; }
+}
+.heroBrand { color: #1E2430; }
+.heroAI    { color: #DE00A5; }
 
-  @include respond-to(md) { font-size: 56px; }
-  @include respond-to(sm) { font-size: 40px; }
+.heroTagline {
+  font-family: $font-serif;
+  font-size: $text-2xl;
+  color: #4B5563;
+  font-weight: $weight-regular;
+  margin-bottom: $space-4;
+  line-height: 1.3;
+  @include respond-to(sm) { font-size: $text-xl; }
 }
 
-.heroBrand { color: white; }
-.heroAI    { color: $brand-primary; }
-
-.heroSubtitle {
+.heroDesc {
   font-size: $text-lg;
-  color: rgba(white, 0.55);
+  color: #6B7280;
   line-height: $line-relaxed;
   margin-bottom: $space-8;
-
   @include respond-to(sm) { font-size: $text-base; }
 }
 
 .heroStats {
   @include flex-center;
-  gap: $space-8;
+  gap: $space-6;
   margin-bottom: $space-8;
   flex-wrap: wrap;
-
-  @include respond-to(sm) { gap: $space-5; }
+  @include respond-to(sm) { gap: $space-4; }
 }
-
-.stat {
-  @include flex-col;
-  align-items: center;
-  gap: 4px;
-}
-
+.stat { @include flex-col; align-items: center; gap: 2px; }
 .statVal {
   font-family: $font-serif;
   font-size: $text-3xl;
   font-weight: $weight-bold;
-  color: $brand-accent;
+  color: #DE00A5;
 }
-
-.statLbl {
-  font-size: $text-xs;
-  color: rgba(white, 0.35);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.statDivider {
-  width: 1px;
-  height: 40px;
-  background: rgba(white, 0.1);
+.statLbl { font-size: $text-xs; color: #9CA3AF; letter-spacing: 0.5px; }
+.statDot {
+  width: 4px; height: 4px;
+  background: #E0C8E8;
+  border-radius: 50%;
   @include respond-to(sm) { display: none; }
 }
 
-.heroCtas {
-  @include flex-center;
-  gap: $space-4;
-  flex-wrap: wrap;
-}
-
+.heroCtas { @include flex-center; gap: $space-4; flex-wrap: wrap; }
 .ctaPrimary {
-  background: $brand-primary;
+  background: #DE00A5;
   color: white;
   font-size: $text-base;
   font-weight: $weight-bold;
-  padding: 14px $space-8;
+  padding: 13px $space-8;
   border-radius: $radius-lg;
-  transition: $transition-fast;
   font-family: $font-primary;
-
-  &:hover {
-    background: lighten($brand-primary, 8%);
-    transform: translateY(-1px);
-  }
+  transition: $transition-fast;
+  &:hover { background: #9F1C81; transform: translateY(-1px); }
 }
-
 .ctaSecondary {
-  background: transparent;
-  color: rgba(white, 0.6);
+  background: white;
+  color: #4B5563;
   font-size: $text-base;
-  padding: 14px $space-6;
+  padding: 13px $space-6;
   border-radius: $radius-lg;
-  border: 1px solid rgba(white, 0.15);
+  border: 1px solid #E0C8E8;
   font-family: $font-primary;
   transition: $transition-fast;
-
-  &:hover {
-    color: white;
-    border-color: rgba(white, 0.35);
-  }
+  &:hover { border-color: #DE00A5; color: #9F1C81; }
 }
 
-// ── CERT BANNER ───────────────────────────────────────
-.certBanner {
+// ── PROMISE STRIP ─────────────────────────────────────
+.promiseStrip {
   @include flex-center;
-  gap: $space-3;
-  background: color-mix(in srgb, $brand-accent 12%, white);
-  color: darken($brand-accent, 20%);
-  font-size: $text-sm;
-  font-weight: $weight-medium;
+  gap: $space-6;
+  flex-wrap: wrap;
+  background: white;
+  border-top: 1px solid #F3E8F8;
+  border-bottom: 1px solid #F3E8F8;
   padding: $space-4 $space-6;
-  text-align: center;
-
-  svg { flex-shrink: 0; }
+  @include respond-to(md) { flex-direction: column; gap: $space-3; padding: $space-5; }
 }
-
-// ── MODULES SECTION ───────────────────────────────────
-.modulesSection {
-  padding: $space-12 0 $space-16;
+.promiseItem {
+  @include flex-center;
+  gap: $space-2;
+  font-size: $text-sm;
+  color: #4B5563;
+  svg { color: #DE00A5; flex-shrink: 0; }
 }
+.promiseDivider { width: 1px; height: 20px; background: #F3E8F8; @include respond-to(md) { display: none; } }
 
+// ── MODULES ───────────────────────────────────────────
+.modulesSection { padding: $space-12 0 $space-16; background: #FAF3F4; }
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 $space-6;
-
   @include respond-to(sm) { padding: 0 $space-4; }
 }
-
-.cluster {
-  margin-bottom: $space-12;
-
-  &:last-child { margin-bottom: 0; }
-}
-
+.cluster { margin-bottom: $space-12; &:last-child { margin-bottom: 0; } }
 .clusterHeader {
   @include flex-start;
-  gap: $space-3;
-  margin-bottom: $space-6;
-  padding-bottom: $space-3;
-  border-bottom: 1px solid $gray-200;
+  gap: $space-4;
+  margin-bottom: $space-5;
+  padding-bottom: $space-4;
+  border-bottom: 1px solid #EDE0F5;
 }
-
-.clusterDot {
-  width: 12px;
-  height: 12px;
-  border-radius: $radius-full;
-  flex-shrink: 0;
-}
-
-.clusterTitle {
-  font-family: $font-serif;
-  font-size: $text-xl;
-  font-weight: $weight-bold;
-  color: $gray-800;
-}
-
-.clusterCount {
+.clusterPill {
+  display: inline-block;
   font-size: $text-sm;
-  color: $gray-400;
-  margin-right: auto;
+  font-weight: $weight-bold;
+  padding: 5px 16px;
+  border-radius: $radius-full;
+  border: 1px solid;
 }
-
+.clusterCount { font-size: $text-sm; color: #9CA3AF; margin-right: auto; }
 .moduleGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: $space-4;
-
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: $space-5;
   @include respond-to(md) { grid-template-columns: repeat(2, 1fr); }
   @include respond-to(sm) { grid-template-columns: 1fr; }
 }
 
-// ── PORTFOLIO SECTION ─────────────────────────────────
-.portfolioSection {
-  background: $gray-900;
-  padding: $space-12 0;
+// ── PORTFOLIO ─────────────────────────────────────────
+.portfolioSection { background: #1E2430; padding: $space-12 0 $space-16; }
+.portfolioTitle {
+  font-family: $font-serif;
+  font-size: $text-3xl;
+  color: white;
+  text-align: center;
+  margin-bottom: $space-3;
+  @include respond-to(sm) { font-size: $text-2xl; }
 }
-
+.portfolioSub { font-size: $text-base; color: rgba(white,0.45); text-align: center; margin-bottom: $space-10; }
 .portfolioGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: $space-6;
-
   @include respond-to(md) { grid-template-columns: 1fr; gap: $space-4; }
 }
-
 .portfolioItem {
   @include flex-col;
   align-items: center;
   text-align: center;
   gap: $space-2;
-  color: white;
+  strong { font-size: $text-lg; color: white; font-weight: $weight-bold; }
+  span { font-size: $text-sm; color: rgba(white,0.45); line-height: 1.5; }
+}
+.portfolioIcon {
+  width: 56px; height: 56px;
+  border-radius: $radius-xl;
+  @include flex-center;
+  margin-bottom: $space-2;
+}
 
-  svg { color: $brand-accent; }
-
-  strong {
-    font-size: $text-lg;
-    font-weight: $weight-bold;
-  }
-
-  span {
-    font-size: $text-sm;
-    opacity: 0.5;
-  }
+// ── DECORATIVE BLOBS (keep in sync with TSX) ──────────
+.heroBlob1 {
+  position: absolute;
+  top: -80px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(#DE00A5, 0.08) 0%, transparent 65%);
+  pointer-events: none;
+  @include respond-to(md) { width: 300px; height: 300px; }
+}
+.heroBlob2 {
+  position: absolute;
+  bottom: -100px;
+  left: -80px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(#9F1C81, 0.06) 0%, transparent 65%);
+  pointer-events: none;
+  @include respond-to(md) { width: 240px; height: 240px; }
 }

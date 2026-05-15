@@ -1,0 +1,55 @@
+@use '@/styles/tokens' as *;
+@use '@/styles/mixins' as *;
+
+.card {
+  background: #FAFAF8;
+  border: 1px solid #E8E4DC;
+  border-right: 4px solid #1D9E75; // overridden by inline style
+  border-radius: 0 $radius-lg $radius-lg 0;
+  overflow: hidden;
+  margin: $space-4 0;
+  direction: rtl;
+}
+.header {
+  @include flex-between;
+  padding: $space-3 $space-4;
+  border-bottom: 1px solid #E8E4DC;
+  background: white;
+}
+.title {
+  font-size: $text-sm;
+  font-weight: $weight-bold;
+  color: #2C2C28;
+}
+.copyBtn {
+  @include flex-center;
+  gap: $space-1;
+  font-size: $text-sm;
+  color: #8A8A80;
+  font-family: $font-primary;
+  padding: 4px 10px;
+  border-radius: $radius-md;
+  border: 1px solid #E8E4DC;
+  background: white;
+  transition: $transition-fast;
+  cursor: pointer;
+  &:hover { background: #F4F0E8; }
+}
+.prompt {
+  font-family: $font-mono;
+  font-size: $text-sm;
+  color: #2C2C28;
+  padding: $space-4;
+  white-space: pre-wrap;
+  line-height: $line-relaxed;
+  direction: rtl;
+  text-align: right;
+}
+.note {
+  font-size: $text-xs;
+  color: #8A8A80;
+  padding: $space-2 $space-4;
+  border-top: 1px solid #E8E4DC;
+  background: #F4F0E8;
+  font-style: italic;
+}

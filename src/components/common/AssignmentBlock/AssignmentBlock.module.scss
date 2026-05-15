@@ -1,0 +1,81 @@
+@use '@/styles/tokens' as *;
+@use '@/styles/mixins' as *;
+
+.block {
+  border-radius: $radius-xl;
+  overflow: hidden;
+  border: 1px solid #E8E4DC;
+  margin: $space-5 0;
+}
+.header {
+  @include flex-start;
+  gap: $space-3;
+  padding: $space-4 $space-5;
+  color: white;
+}
+.numberCircle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(white, 0.25);
+  @include flex-center;
+  font-family: $font-serif;
+  font-size: $text-lg;
+  font-weight: $weight-bold;
+  flex-shrink: 0;
+}
+.headerText { @include flex-col; gap: 2px; flex: 1; }
+.label { font-size: 11px; opacity: 0.75; letter-spacing: 0.5px; }
+.title { font-size: $text-base; font-weight: $weight-bold; }
+.duration {
+  font-size: 11px;
+  background: rgba(white, 0.2);
+  padding: 3px 10px;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+}
+.body { padding: $space-5; background: white; @include flex-col; gap: $space-4; }
+.description { font-size: $text-base; color: #4B5563; line-height: 1.6; }
+.promptBox {
+  background: #FAFAF8;
+  border: 1px solid #E8E4DC;
+  border-radius: $radius-md;
+  padding: $space-4;
+}
+.promptLine {
+  font-size: $text-sm;
+  color: #2C2C28;
+  line-height: 1.8;
+  &:empty { height: $space-3; }
+}
+.input {
+  width: 100%;
+  border: 1px solid #E8E4DC;
+  border-radius: $radius-md;
+  padding: $space-3 $space-4;
+  font-family: $font-primary;
+  font-size: $text-base;
+  color: #2C2C28;
+  resize: vertical;
+  direction: rtl;
+  text-align: right;
+  line-height: 1.6;
+  transition: border-color 0.15s;
+  &:focus { outline: none; border-color: #1D9E75; }
+  &::placeholder { color: #B8B0A8; }
+}
+.footer { @include flex-between; }
+.charCount { font-size: $text-xs; color: #B8B0A8; }
+.saveBtn {
+  background: #E8E4DC;
+  color: white;
+  font-family: $font-primary;
+  font-size: $text-sm;
+  font-weight: $weight-bold;
+  padding: 8px 20px;
+  border-radius: $radius-md;
+  cursor: pointer;
+  border: none;
+  transition: $transition-fast;
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:not(:disabled):hover { filter: brightness(0.9); }
+}

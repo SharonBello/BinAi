@@ -1,0 +1,942 @@
+// m01.module.scss — Module 01 tech visual style
+@use "@/styles/tokens" as *;
+@use "@/styles/mixins" as *;
+
+// All sections share these base styles
+// Colors come from CSS vars set by ModuleShell
+
+.section {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: $space-8 $space-6 $space-12;
+  @include respond-to(sm) {
+    padding: $space-6 $space-4 $space-10;
+  }
+}
+
+.sectionHeader {
+  @include flex-between;
+  margin-bottom: $space-6;
+  padding-bottom: $space-4;
+  border-bottom: 1px solid var(--module-surface);
+  flex-wrap: wrap;
+  gap: $space-3;
+  flex-direction: row-reverse;
+}
+.timer {
+  font-size: $text-sm;
+  color: var(--module-text-muted);
+  font-family: $font-mono;
+}
+.sectionTitle {
+  font-family: $font-serif;
+  font-size: $text-2xl;
+  color: var(--module-text);
+  font-weight: $weight-bold;
+  @include respond-to(sm) {
+    font-size: $text-xl;
+  }
+}
+
+// ── OPENING ───────────────────────────────────────────
+.hookBox {
+  text-align: center;
+  padding: $space-8 $space-6;
+  background: white;
+  border-radius: $radius-xl;
+  border: 1px solid var(--module-surface);
+  margin-bottom: $space-6;
+}
+.hookEmoji {
+  font-size: 48px;
+  margin-bottom: $space-4;
+}
+.hookQuestion {
+  font-family: $font-serif;
+  font-size: $text-2xl;
+  font-weight: $weight-bold;
+  color: var(--module-text);
+  margin-bottom: $space-3;
+}
+.hookSub {
+  font-size: $text-lg;
+  color: var(--module-text-muted);
+}
+
+.cardGroup {
+  margin-bottom: $space-6;
+}
+.groupTitle {
+  font-size: $text-lg;
+  font-weight: $weight-bold;
+  color: var(--module-text);
+  margin-bottom: $space-4;
+}
+.fearGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: $space-3;
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+.fearCard {
+  @include flex-start;
+  gap: $space-3;
+  padding: $space-4;
+  background: white;
+  border: 2px solid #e8e4dc;
+  border-radius: $radius-lg;
+  cursor: pointer;
+  text-align: right;
+  transition: $transition-fast;
+  font-family: $font-primary;
+  &:hover {
+    border-color: var(--module-primary);
+  }
+}
+.fearCardSelected {
+  border-color: var(--module-primary);
+}
+.fearEmoji {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.fearText {
+  font-size: $text-sm;
+  color: #2c2c28;
+}
+.fearResponse {
+  font-size: $text-base;
+  color: var(--module-primary);
+  font-weight: $weight-medium;
+  margin-top: $space-4;
+  text-align: center;
+}
+
+.agendaBox {
+  background: white;
+  border-radius: $radius-xl;
+  border: 1px solid #e8e4dc;
+  padding: $space-5;
+  margin: $space-6 0;
+}
+.agendaTitle {
+  font-size: $text-base;
+  font-weight: $weight-bold;
+  color: #2c2c28;
+  margin-bottom: $space-4;
+}
+.agendaList {
+  @include flex-col;
+  gap: $space-2;
+}
+.agendaItem {
+  @include flex-start;
+  gap: $space-4;
+}
+.agendaTime {
+  font-family: $font-mono;
+  font-size: $text-sm;
+  width: 50px;
+  flex-shrink: 0;
+}
+.agendaLabel {
+  font-size: $text-sm;
+  color: #4b5563;
+}
+
+// ── THEORY ────────────────────────────────────────────
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #e8e4dc;
+  margin-bottom: $space-6;
+  overflow-x: auto;
+}
+.tab {
+  padding: $space-3 $space-5;
+  font-size: $text-sm;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: $font-primary;
+  transition: $transition-fast;
+  &:hover {
+    color: #2c2c28;
+  }
+}
+.tabActive {
+  color: var(--module-primary);
+  border-bottom-color: var(--module-primary);
+  font-weight: $weight-bold;
+}
+.tabInstruction {
+  font-size: $text-sm;
+  color: #6b7280;
+  margin-bottom: $space-4;
+}
+
+.mythsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: $space-4;
+}
+.mythCard {
+  background: white;
+  border: 1px solid #e8e4dc;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  cursor: pointer;
+  transition: $transition-fast;
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+}
+.mythClaim {
+  @include flex-start;
+  gap: $space-3;
+  padding: $space-4;
+}
+.mythEmoji {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.mythReveal {
+  padding: $space-4;
+  border-top: 2px solid;
+}
+.mythVerdict {
+  font-size: 11px;
+  font-weight: $weight-bold;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: $space-2;
+}
+.mythExplanation {
+  font-size: $text-sm;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.chefSection {
+  @include flex-col;
+  gap: $space-5;
+}
+.chefHook {
+  @include flex-start;
+  gap: $space-4;
+  padding: $space-5;
+  background: white;
+  border-radius: $radius-xl;
+  border: 1px solid #e8e4dc;
+}
+.chefEmoji {
+  font-size: 48px;
+}
+.chefTitle {
+  font-family: $font-serif;
+  font-size: $text-xl;
+  font-weight: $weight-bold;
+  color: #2c2c28;
+}
+.chefSteps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-4;
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+.chefStep {
+  @include flex-start;
+  gap: $space-3;
+  padding: $space-4;
+  background: white;
+  border-radius: $radius-lg;
+  border: 1px solid #e8e4dc;
+}
+.chefStepIcon {
+  font-size: 28px;
+}
+.chefStepText {
+  font-size: $text-sm;
+  color: #2c2c28;
+  line-height: 1.6;
+}
+.chefPunchline {
+  font-size: $text-lg;
+  padding: $space-4 $space-5;
+  border-right: 4px solid;
+  border-radius: 0 $radius-lg $radius-lg 0;
+  background: white;
+}
+.infoBox {
+  background: #f4f0e8;
+  border-radius: $radius-lg;
+  padding: $space-5;
+  p + p {
+    margin-top: $space-3;
+  }
+  font-size: $text-sm;
+  color: #2c2c28;
+  line-height: 1.7;
+}
+
+.toolsGrid {
+  @include flex-col;
+  gap: $space-4;
+}
+.toolCard {
+  border-radius: $radius-xl;
+  overflow: hidden;
+  border: 1px solid #e8e4dc;
+}
+.toolHeader {
+  padding: $space-4 $space-5;
+  @include flex-start;
+  gap: $space-3;
+  color: white;
+}
+.toolEmoji {
+  font-size: 24px;
+}
+.toolName {
+  font-weight: $weight-bold;
+  font-size: $text-base;
+  display: block;
+}
+.toolMaker {
+  font-size: 11px;
+  opacity: 0.7;
+}
+.toolPrice {
+  font-size: 11px;
+  background: rgba(white, 0.2);
+  padding: 3px 10px;
+  border-radius: $radius-full;
+  margin-right: auto;
+  flex-shrink: 0;
+}
+.toolBody {
+  padding: $space-4 $space-5;
+  background: white;
+  @include flex-col;
+  gap: $space-2;
+}
+.toolRow {
+  @include flex-start;
+  gap: $space-3;
+  font-size: $text-sm;
+  color: #4b5563;
+}
+.toolRowLabel {
+  font-weight: $weight-bold;
+  color: #2c2c28;
+  flex-shrink: 0;
+}
+.toolTip {
+  background: #f4f0e8;
+  border-radius: $radius-lg;
+  padding: $space-4;
+  font-size: $text-sm;
+  color: #2c2c28;
+}
+
+.limitsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-4;
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+.limitCard {
+  border-radius: $radius-xl;
+  overflow: hidden;
+  border: 1px solid #e8e4dc;
+}
+.limitHeader {
+  padding: $space-4;
+  @include flex-start;
+  gap: $space-3;
+  color: white;
+}
+.limitIcon {
+  font-size: 24px;
+}
+.limitTitle {
+  font-weight: $weight-bold;
+  font-size: $text-base;
+}
+.limitBody {
+  padding: $space-4;
+  background: white;
+  @include flex-col;
+  gap: $space-3;
+}
+.limitRule {
+  font-size: $text-sm;
+  color: #2c2c28;
+  line-height: 1.6;
+}
+.limitTip {
+  font-size: $text-sm;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.humorBox {
+  @include flex-start;
+  gap: $space-4;
+  background: #fffbf0;
+  border: 1px solid #f0d880;
+  border-radius: $radius-lg;
+  padding: $space-4;
+  margin-top: $space-6;
+  font-size: $text-sm;
+  color: #2c2c28;
+  line-height: 1.7;
+}
+.humorEmoji {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+// ── REVERSE ENGINEERING ───────────────────────────────
+.detectiveBox {
+  background: #f4f0e8;
+  border-radius: $radius-xl;
+  padding: $space-5;
+  margin-bottom: $space-6;
+}
+.detectiveIntro {
+  font-size: $text-base;
+  color: #2c2c28;
+  line-height: 1.7;
+}
+.compareGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-4;
+  margin: $space-5 0;
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+.compareCard {
+  border-radius: $radius-xl;
+  overflow: hidden;
+  border: 1px solid #e8e4dc;
+}
+.compareLabel {
+  padding: $space-3 $space-4;
+  font-size: $text-sm;
+  font-weight: $weight-bold;
+  color: white;
+}
+.compareText {
+  padding: $space-4;
+  font-family: $font-mono;
+  font-size: 16px;
+  white-space: pre-wrap;
+  background: white;
+  color: #2c2c28;
+  line-height: 1.7;
+  direction: rtl;
+  text-align: right;
+  margin: 0;
+}
+.revealBtn {
+  width: 100%;
+  padding: $space-4;
+  background: white;
+  border: 2px solid;
+  border-radius: $radius-lg;
+  font-family: $font-primary;
+  font-size: $text-base;
+  font-weight: $weight-bold;
+  cursor: pointer;
+  margin: $space-6 0;
+  transition: $transition-fast;
+}
+.revealSection {
+  @include flex-col;
+  gap: $space-5;
+  margin: $space-5 0;
+}
+.revealTitle {
+  font-size: $text-lg;
+  font-weight: $weight-bold;
+  color: #2c2c28;
+}
+.revealLabel {
+  font-size: $text-sm;
+  font-weight: $weight-bold;
+  margin-bottom: $space-2;
+}
+.revealPrompt {
+  font-family: $font-mono;
+  font-size: 16px;
+  background: #fafaf8;
+  border: 1px solid #e8e4dc;
+  border-radius: $radius-md;
+  padding: $space-4;
+  white-space: pre-wrap;
+  direction: rtl;
+  text-align: right;
+  margin: 0 0 $space-2;
+}
+.revealNote {
+  font-size: $text-sm;
+  color: #6b7280;
+  font-style: italic;
+}
+.revelInsight {
+  border-right: 4px solid;
+  border-radius: 0 $radius-lg $radius-lg 0;
+  padding: $space-4;
+  background: white;
+  font-size: $text-sm;
+  color: #2c2c28;
+  line-height: 1.7;
+}
+
+// ── PRACTICE ──────────────────────────────────────────
+.stepNav {
+  display: flex;
+  gap: $space-3;
+  margin-bottom: $space-6;
+}
+.stepBtn {
+  padding: $space-2 $space-5;
+  border-radius: $radius-full;
+  border: 2px solid #e8e4dc;
+  font-family: $font-primary;
+  font-size: $text-sm;
+  cursor: pointer;
+  transition: $transition-fast;
+  color: #6b7280;
+}
+.stepBtnActive {
+  color: white;
+  border-color: transparent;
+}
+.stepContent {
+  @include flex-col;
+  gap: $space-4;
+}
+.stepLabel {
+  font-size: 11px;
+  font-weight: $weight-bold;
+  letter-spacing: 1px;
+}
+.stepDesc {
+  font-size: $text-base;
+  color: #4b5563;
+  line-height: 1.7;
+}
+.scaffoldNote {
+  background: #f4f0e8;
+  border-radius: $radius-md;
+  padding: $space-4;
+  font-size: $text-sm;
+  color: #2c2c28;
+  line-height: 1.7;
+}
+.compareNote {
+  background: #eef5ff;
+  border-radius: $radius-md;
+  padding: $space-4;
+  font-size: $text-sm;
+  color: #0c447c;
+  line-height: 1.7;
+}
+.nextStepBtn {
+  font-family: $font-primary;
+  font-size: $text-sm;
+  font-weight: $weight-bold;
+  cursor: pointer;
+  padding: $space-3 0;
+  background: none;
+  border: none;
+}
+
+// ── SHARED PROJECT ────────────────────────────────────
+.sharedIntro {
+  @include flex-col;
+  gap: $space-2;
+  margin-bottom: $space-6;
+  font-size: $text-base;
+  color: #4b5563;
+  line-height: 1.7;
+}
+.sharedInputs {
+  @include flex-col;
+  gap: $space-5;
+  margin-bottom: $space-6;
+}
+.sharedInput {
+  @include flex-col;
+  gap: $space-2;
+}
+.sharedLabel {
+  font-size: $text-sm;
+  font-weight: $weight-bold;
+}
+.sharedTextarea {
+  width: 100%;
+  border: 1px solid #e8e4dc;
+  border-radius: $radius-md;
+  padding: $space-3 $space-4;
+  font-family: $font-primary;
+  font-size: $text-base;
+  resize: vertical;
+  direction: rtl;
+  text-align: right;
+  line-height: 1.6;
+  &:focus {
+    outline: none;
+    border-color: var(--module-primary);
+  }
+}
+.galleryBox {
+  border-right: 4px solid;
+  border-radius: 0 $radius-lg $radius-lg 0;
+  padding: $space-4 $space-5;
+  background: white;
+  margin: $space-5 0;
+}
+.galleryList {
+  margin-top: $space-3;
+  @include flex-col;
+  gap: $space-2;
+  list-style: disc;
+  padding-right: $space-5;
+  li {
+    font-size: $text-sm;
+    color: #4b5563;
+    line-height: 1.7;
+  }
+}
+
+// ── QUIZ ──────────────────────────────────────────────
+.quizIntro {
+  font-size: $text-sm;
+  color: #6b7280;
+  margin-bottom: $space-3;
+}
+.quizProgress {
+  height: 6px;
+  background: #e8e4dc;
+  border-radius: $radius-full;
+  margin-bottom: $space-6;
+  overflow: hidden;
+}
+.quizProgressBar {
+  height: 100%;
+  border-radius: $radius-full;
+  transition: width 0.3s ease;
+}
+.quizQuestion {
+  background: white;
+  border: 1px solid #e8e4dc;
+  border-radius: $radius-xl;
+  padding: $space-5;
+  margin-bottom: $space-4;
+}
+.quizQText {
+  font-size: $text-base;
+  color: #2c2c28;
+  margin-bottom: $space-4;
+  line-height: 1.6;
+}
+.quizQNum {
+  font-weight: $weight-bold;
+  margin-left: $space-2;
+}
+.quizOptions {
+  @include flex-col;
+  gap: $space-2;
+}
+.quizOption {
+  text-align: right;
+  padding: $space-3 $space-4;
+  background: white;
+  border: 1.5px solid #e8e4dc;
+  border-radius: $radius-md;
+  cursor: pointer;
+  font-family: $font-primary;
+  font-size: $text-sm;
+  color: #2c2c28;
+  transition: $transition-fast;
+  @include flex-start;
+  gap: $space-3;
+  &:hover {
+    border-color: var(--module-primary);
+  }
+}
+.quizOptionSelected {
+  border-color: var(--module-primary);
+}
+.quizOptLabel {
+  font-weight: $weight-bold;
+  color: #8a8a80;
+  flex-shrink: 0;
+}
+.quizResults {
+  @include flex-col;
+  gap: $space-4;
+}
+.scoreCircle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid;
+  @include flex-col;
+  @include flex-center;
+  margin: $space-6 auto;
+}
+.scoreVal {
+  font-family: $font-serif;
+  font-size: $text-3xl;
+  font-weight: $weight-bold;
+  line-height: 1;
+}
+.scoreLbl {
+  font-size: $text-sm;
+  font-weight: $weight-medium;
+}
+.quizReview {
+  background: white;
+  border-radius: $radius-lg;
+  border: 1px solid #e8e4dc;
+  padding: $space-4;
+}
+.correct {
+  border-color: #d0f0e0;
+  background: #f6fef9;
+}
+.incorrect {
+  border-color: #ffd0d0;
+  background: #fff5f5;
+}
+.quizReviewQ {
+  font-size: $text-sm;
+  font-weight: $weight-medium;
+  margin-bottom: $space-2;
+  color: #2c2c28;
+}
+.quizCorrectAns {
+  font-size: $text-sm;
+  color: #1d9e75;
+  margin-bottom: $space-2;
+}
+.quizExplanation {
+  font-size: $text-sm;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+// ── CLOSING ───────────────────────────────────────────
+.summaryBox {
+  background: white;
+  border-right: 4px solid;
+  border-radius: 0 $radius-xl $radius-xl 0;
+  padding: $space-5;
+  margin-bottom: $space-6;
+}
+.summaryTitle {
+  font-family: $font-serif;
+  font-size: $text-xl;
+  font-weight: $weight-bold;
+  color: #2c2c28;
+  margin-bottom: $space-4;
+}
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-3;
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+.summaryItem {
+  @include flex-start;
+  gap: $space-3;
+  font-size: $text-sm;
+  color: #4b5563;
+}
+.summaryIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.artifactBox {
+  border-radius: $radius-xl;
+  overflow: hidden;
+  border: 1px solid #e8e4dc;
+  margin-bottom: $space-6;
+}
+.artifactHeader {
+  padding: $space-4 $space-5;
+}
+.artifactTitle {
+  font-size: $text-base;
+  font-weight: $weight-bold;
+  color: white;
+}
+.artifactSub {
+  font-size: $text-sm;
+  color: rgba(white, 0.75);
+  display: block;
+  margin-top: 2px;
+}
+.artifactBody {
+  padding: $space-5;
+  background: white;
+  @include flex-col;
+  gap: $space-3;
+}
+.artifactRow {
+  @include flex-start;
+  gap: $space-3;
+}
+.artifactNum {
+  font-family: $font-serif;
+  font-size: $text-xl;
+  font-weight: $weight-bold;
+  flex-shrink: 0;
+  width: 24px;
+}
+.artifactInput {
+  flex: 1;
+  border: 1px solid #e8e4dc;
+  border-radius: $radius-md;
+  padding: $space-2 $space-3;
+  font-family: $font-primary;
+  font-size: $text-sm;
+  direction: rtl;
+  &:focus {
+    outline: none;
+    border-color: var(--module-primary);
+  }
+}
+.downloadBtn {
+  width: 100%;
+  padding: $space-3;
+  color: white;
+  font-family: $font-primary;
+  font-size: $text-sm;
+  font-weight: $weight-bold;
+  border-radius: $radius-md;
+  cursor: pointer;
+  border: none;
+  margin-top: $space-3;
+}
+.completionBox {
+  text-align: center;
+  padding: $space-8;
+  background: white;
+  border-radius: $radius-xl;
+  border: 1px solid #e8e4dc;
+}
+.completionIcon {
+  font-size: 56px;
+  margin-bottom: $space-4;
+}
+.completionTitle {
+  font-family: $font-serif;
+  font-size: $text-2xl;
+  font-weight: $weight-bold;
+  color: #2c2c28;
+  margin-bottom: $space-3;
+}
+.completionSub {
+  font-size: $text-base;
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+// ── BREAK ─────────────────────────────────────────────
+.breakBox {
+  @include flex-col;
+  @include flex-center;
+  padding: $space-16;
+}
+.breakEmoji {
+  font-size: 80px;
+  margin-bottom: $space-5;
+}
+.breakTitle {
+  font-family: $font-serif;
+  font-size: $text-4xl;
+  font-weight: $weight-bold;
+  color: #2c2c28;
+  margin-bottom: $space-4;
+}
+.breakTimer {
+  font-family: $font-mono;
+  font-size: 64px;
+  font-weight: $weight-bold;
+  line-height: 1;
+  margin-bottom: $space-5;
+}
+.breakSub {
+  font-size: $text-lg;
+  color: #6b7280;
+  text-align: center;
+  max-width: 400px;
+}
+
+// ── SHARED BUTTON ─────────────────────────────────────
+.nextBtn {
+  width: 100%;
+  padding: $space-4;
+  color: white;
+  font-family: $font-primary;
+  font-size: $text-base;
+  font-weight: $weight-bold;
+  border-radius: $radius-lg;
+  cursor: pointer;
+  border: none;
+  margin-top: $space-8;
+  transition: $transition-fast;
+  &:hover {
+    filter: brightness(0.9);
+    transform: translateY(-1px);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.termBox {
+  background: white;
+  border: 1.5px solid var(--module-surface);
+  border-right: 4px solid var(--module-primary);
+  border-radius: 0 $radius-lg $radius-lg 0;
+  padding: $space-4 $space-5;
+  margin-bottom: $space-5;
+  p {
+    font-size: $text-base;
+    color: #2c2c28;
+    margin-bottom: $space-1;
+  }
+}
+.termLabel {
+  font-size: 10px;
+  font-weight: $weight-bold;
+  letter-spacing: 1px;
+  color: var(--module-text-muted);
+  display: block;
+  margin-bottom: $space-2;
+  text-transform: uppercase;
+}
+.termSub {
+  font-size: $text-sm;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-top: $space-2;
+}
