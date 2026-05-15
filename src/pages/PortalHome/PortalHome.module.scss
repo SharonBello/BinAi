@@ -1,0 +1,251 @@
+// ═══════════════════════════════════════════════════════
+// PortalHome.module.scss
+// ═══════════════════════════════════════════════════════
+@use '@/styles/tokens' as *;
+@use '@/styles/mixins' as *;
+
+.page {
+  min-height: 100vh;
+}
+
+// ── HERO ──────────────────────────────────────────────
+.hero {
+  background: $gray-900;
+  position: relative;
+  overflow: hidden;
+  padding: $space-20 0 $space-16;
+
+  @include respond-to(md) { padding: $space-12 0 $space-10; }
+}
+
+.heroGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 $space-6;
+  text-align: center;
+}
+
+.heroTag {
+  display: inline-block;
+  border: 1px solid rgba($brand-accent, 0.5);
+  color: $brand-accent;
+  font-size: $text-sm;
+  letter-spacing: 1px;
+  padding: $space-1 $space-5;
+  border-radius: $radius-full;
+  margin-bottom: $space-6;
+}
+
+.heroTitle {
+  font-family: $font-serif;
+  font-size: 80px;
+  line-height: 1;
+  font-weight: $weight-black;
+  margin-bottom: $space-4;
+  letter-spacing: -2px;
+
+  @include respond-to(md) { font-size: 56px; }
+  @include respond-to(sm) { font-size: 40px; }
+}
+
+.heroBrand { color: white; }
+.heroAI    { color: $brand-primary; }
+
+.heroSubtitle {
+  font-size: $text-lg;
+  color: rgba(white, 0.55);
+  line-height: $line-relaxed;
+  margin-bottom: $space-8;
+
+  @include respond-to(sm) { font-size: $text-base; }
+}
+
+.heroStats {
+  @include flex-center;
+  gap: $space-8;
+  margin-bottom: $space-8;
+  flex-wrap: wrap;
+
+  @include respond-to(sm) { gap: $space-5; }
+}
+
+.stat {
+  @include flex-col;
+  align-items: center;
+  gap: 4px;
+}
+
+.statVal {
+  font-family: $font-serif;
+  font-size: $text-3xl;
+  font-weight: $weight-bold;
+  color: $brand-accent;
+}
+
+.statLbl {
+  font-size: $text-xs;
+  color: rgba(white, 0.35);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.statDivider {
+  width: 1px;
+  height: 40px;
+  background: rgba(white, 0.1);
+  @include respond-to(sm) { display: none; }
+}
+
+.heroCtas {
+  @include flex-center;
+  gap: $space-4;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary {
+  background: $brand-primary;
+  color: white;
+  font-size: $text-base;
+  font-weight: $weight-bold;
+  padding: 14px $space-8;
+  border-radius: $radius-lg;
+  transition: $transition-fast;
+  font-family: $font-primary;
+
+  &:hover {
+    background: lighten($brand-primary, 8%);
+    transform: translateY(-1px);
+  }
+}
+
+.ctaSecondary {
+  background: transparent;
+  color: rgba(white, 0.6);
+  font-size: $text-base;
+  padding: 14px $space-6;
+  border-radius: $radius-lg;
+  border: 1px solid rgba(white, 0.15);
+  font-family: $font-primary;
+  transition: $transition-fast;
+
+  &:hover {
+    color: white;
+    border-color: rgba(white, 0.35);
+  }
+}
+
+// ── CERT BANNER ───────────────────────────────────────
+.certBanner {
+  @include flex-center;
+  gap: $space-3;
+  background: color-mix(in srgb, $brand-accent 12%, white);
+  color: darken($brand-accent, 20%);
+  font-size: $text-sm;
+  font-weight: $weight-medium;
+  padding: $space-4 $space-6;
+  text-align: center;
+
+  svg { flex-shrink: 0; }
+}
+
+// ── MODULES SECTION ───────────────────────────────────
+.modulesSection {
+  padding: $space-12 0 $space-16;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $space-6;
+
+  @include respond-to(sm) { padding: 0 $space-4; }
+}
+
+.cluster {
+  margin-bottom: $space-12;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.clusterHeader {
+  @include flex-start;
+  gap: $space-3;
+  margin-bottom: $space-6;
+  padding-bottom: $space-3;
+  border-bottom: 1px solid $gray-200;
+}
+
+.clusterDot {
+  width: 12px;
+  height: 12px;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+}
+
+.clusterTitle {
+  font-family: $font-serif;
+  font-size: $text-xl;
+  font-weight: $weight-bold;
+  color: $gray-800;
+}
+
+.clusterCount {
+  font-size: $text-sm;
+  color: $gray-400;
+  margin-right: auto;
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: $space-4;
+
+  @include respond-to(md) { grid-template-columns: repeat(2, 1fr); }
+  @include respond-to(sm) { grid-template-columns: 1fr; }
+}
+
+// ── PORTFOLIO SECTION ─────────────────────────────────
+.portfolioSection {
+  background: $gray-900;
+  padding: $space-12 0;
+}
+
+.portfolioGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-6;
+
+  @include respond-to(md) { grid-template-columns: 1fr; gap: $space-4; }
+}
+
+.portfolioItem {
+  @include flex-col;
+  align-items: center;
+  text-align: center;
+  gap: $space-2;
+  color: white;
+
+  svg { color: $brand-accent; }
+
+  strong {
+    font-size: $text-lg;
+    font-weight: $weight-bold;
+  }
+
+  span {
+    font-size: $text-sm;
+    opacity: 0.5;
+  }
+}

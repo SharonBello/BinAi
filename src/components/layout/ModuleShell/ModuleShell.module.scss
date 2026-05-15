@@ -1,0 +1,107 @@
+// ═══════════════════════════════════════════════════════
+// ModuleShell.module.scss
+// Visual style classes — shape language per module type.
+// Colors come from CSS custom properties (set by config).
+// ═══════════════════════════════════════════════════════
+@use '@/styles/tokens' as *;
+@use '@/styles/mixins' as *;
+
+.shell {
+  min-height: 100vh;
+  background: var(--module-bg);
+  color: var(--module-text);
+  transition: background 0.3s ease;
+}
+
+// ── TECH (m01) — grid, precision, sharp edges ─────────
+.shell--tech {
+  --card-radius: #{$radius-sm};
+  --section-divider: 1px solid var(--module-surface);
+  --card-border: 1px solid var(--module-primary);
+  --accent-weight: 600;
+
+  // Tech grid overlay on hero sections
+  .module-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--module-surface) 1px, transparent 1px),
+      linear-gradient(90deg, var(--module-surface) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+}
+
+// ── BOTANICAL (m02) — organic, soft, curved ───────────
+.shell--botanical {
+  --card-radius: #{$radius-xl};
+  --section-divider: none;
+  --card-border: 1px solid var(--module-surface);
+  --accent-weight: 500;
+}
+
+// ── ACADEMIC (m03) — structured, bookish ──────────────
+.shell--academic {
+  --card-radius: #{$radius-md};
+  --section-divider: 2px solid var(--module-surface);
+  --card-border: 1px solid var(--module-primary);
+  --accent-weight: 600;
+}
+
+// ── COMMUNITY (m04) — warm, circular, earth ───────────
+.shell--community {
+  --card-radius: #{$radius-2xl};
+  --section-divider: none;
+  --card-border: 2px solid var(--module-surface);
+  --accent-weight: 500;
+}
+
+// ── CREATIVE (m05) — playful, waves, large radius ─────
+.shell--creative {
+  --card-radius: #{$radius-2xl};
+  --section-divider: none;
+  --card-border: 2px solid var(--module-accent);
+  --accent-weight: 700;
+}
+
+// ── REFLECTIVE (m06) — minimal, dotted, inner ─────────
+.shell--reflective {
+  --card-radius: #{$radius-lg};
+  --section-divider: 1px dashed var(--module-surface);
+  --card-border: 1px dashed var(--module-primary);
+  --accent-weight: 400;
+}
+
+// ── CONNECTIVE (m07) — flowing, lines, rose ───────────
+.shell--connective {
+  --card-radius: #{$radius-xl};
+  --section-divider: none;
+  --card-border: 1px solid var(--module-surface);
+  --accent-weight: 500;
+}
+
+// ── ZONAL (m08) — bold blocks, color areas ────────────
+.shell--zonal {
+  --card-radius: #{$radius-md};
+  --section-divider: 4px solid var(--module-primary);
+  --card-border: none;
+  --accent-weight: 700;
+}
+
+// ── GROWTH (m09) — upward, amber, organic ─────────────
+.shell--growth {
+  --card-radius: #{$radius-xl};
+  --section-divider: none;
+  --card-border: 1px solid var(--module-surface);
+  --accent-weight: 500;
+}
+
+// ── CIRCULAR (m10) — circle motifs, calm ─────────────
+.shell--circular {
+  --card-radius: #{$radius-2xl};
+  --section-divider: none;
+  --card-border: 1px solid var(--module-surface);
+  --accent-weight: 400;
+}

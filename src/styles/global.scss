@@ -1,0 +1,98 @@
+// ═══════════════════════════════════════════════════════
+// BinAI — Global Styles
+// ═══════════════════════════════════════════════════════
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700;900&family=Heebo:wght@300;400;500;700;900&display=swap');
+
+// ── RESET ────────────────────────────────────────────
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// ── BASE ─────────────────────────────────────────────
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-primary;
+  font-size: $text-base;
+  line-height: $line-normal;
+  color: $gray-800;
+  background: $brand-bg;
+  direction: rtl;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+// ── TYPOGRAPHY ───────────────────────────────────────
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-serif;
+  font-weight: $weight-bold;
+  line-height: $line-tight;
+  color: $gray-900;
+}
+
+h1 { font-size: $text-4xl; @include respond-to(md) { font-size: $text-3xl; } }
+h2 { font-size: $text-3xl; @include respond-to(md) { font-size: $text-2xl; } }
+h3 { font-size: $text-2xl; }
+h4 { font-size: $text-xl; }
+h5 { font-size: $text-lg; }
+h6 { font-size: $text-base; }
+
+p { line-height: $line-relaxed; }
+
+a {
+  color: $brand-primary;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+button {
+  font-family: $font-primary;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+ul, ol { list-style: none; }
+
+// ── UTILITY CLASSES ──────────────────────────────────
+.visually-hidden { @include visually-hidden; }
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $space-6;
+  @include respond-to(sm) { padding: 0 $space-4; }
+}
+
+.container--narrow {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 $space-6;
+}
+
+// ── SCROLLBAR ────────────────────────────────────────
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: $gray-200;
+  border-radius: $radius-full;
+  &:hover { background: $gray-400; }
+}
+
+// ── PRINT BASE ───────────────────────────────────────
+@media print {
+  body { background: white; color: black; }
+  .no-print { display: none !important; }
+}

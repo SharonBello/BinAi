@@ -1,0 +1,134 @@
+@use '@/styles/tokens' as *;
+@use '@/styles/mixins' as *;
+
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// ── NAV ───────────────────────────────────────────────
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+  background: $gray-900;
+  border-bottom: 1px solid rgba(white, 0.06);
+}
+
+.navInner {
+  @include flex-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $space-6;
+  height: 56px;
+  gap: $space-6;
+
+  @include respond-to(sm) { padding: 0 $space-4; }
+}
+
+// ── BRAND ─────────────────────────────────────────────
+.brand {
+  @include flex-center;
+  gap: 1px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.brandBin {
+  font-family: $font-serif;
+  font-size: $text-xl;
+  font-weight: $weight-black;
+  color: white;
+  letter-spacing: -1px;
+}
+
+.brandAI {
+  font-family: $font-serif;
+  font-size: $text-xl;
+  font-weight: $weight-black;
+  color: $brand-primary;
+  letter-spacing: -1px;
+}
+
+// ── NAV LINKS ─────────────────────────────────────────
+.navLinks {
+  @include flex-center;
+  gap: $space-1;
+  flex: 1;
+
+  @include respond-to(md) { display: none; }
+}
+
+.navLink {
+  font-size: $text-sm;
+  color: rgba(white, 0.45);
+  padding: $space-2 $space-4;
+  border-radius: $radius-md;
+  transition: $transition-fast;
+  font-family: $font-primary;
+
+  &:hover { color: rgba(white, 0.85); background: rgba(white, 0.06); }
+  &--active { color: white; background: rgba($brand-primary, 0.15); }
+}
+
+// ── AUTH ──────────────────────────────────────────────
+.authArea {
+  @include flex-center;
+  gap: $space-3;
+  flex-shrink: 0;
+}
+
+.authBtn {
+  @include flex-center;
+  gap: $space-2;
+  color: rgba(white, 0.55);
+  font-size: $text-sm;
+  font-family: $font-primary;
+  padding: $space-2 $space-4;
+  border-radius: $radius-md;
+  border: 1px solid rgba(white, 0.12);
+  transition: $transition-fast;
+
+  &:hover { color: white; border-color: rgba(white, 0.3); }
+
+  @include respond-to(sm) {
+    .authLabel { display: none; }
+    padding: $space-2;
+  }
+}
+
+// ── MOBILE TOGGLE ─────────────────────────────────────
+.mobileToggle {
+  display: none;
+  color: rgba(white, 0.7);
+  padding: $space-2;
+
+  @include respond-to(md) { display: flex; }
+}
+
+// ── MOBILE DRAWER ─────────────────────────────────────
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  background: $gray-900;
+  border-top: 1px solid rgba(white, 0.06);
+  padding: $space-3 $space-4;
+}
+
+.mobileNavLink {
+  font-size: $text-base;
+  color: rgba(white, 0.7);
+  padding: $space-4 0;
+  border-bottom: 1px solid rgba(white, 0.06);
+  text-align: right;
+  font-family: $font-primary;
+
+  &:last-child { border-bottom: none; }
+  &:hover { color: white; }
+}
+
+// ── MAIN ──────────────────────────────────────────────
+.main {
+  flex: 1;
+}

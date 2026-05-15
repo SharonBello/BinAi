@@ -1,0 +1,179 @@
+// ═══════════════════════════════════════════════════════
+// ModuleCard.module.scss
+// ═══════════════════════════════════════════════════════
+@use '@/styles/tokens' as *;
+@use '@/styles/mixins' as *;
+
+.card {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: $radius-xl;
+  border: 1.5px solid color-mix(in srgb, var(--card-primary) 20%, transparent);
+  padding: $space-5;
+  cursor: default;
+  transition: $transition-normal;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  overflow: hidden;
+  min-height: 220px;
+
+  @include respond-to(sm) { min-height: auto; }
+}
+
+.accentBar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 4px;
+  background: var(--card-primary);
+  border-radius: $radius-xl $radius-xl 0 0;
+}
+
+// ── AVAILABLE ─────────────────────────────────────────
+.card--available {
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--card-primary) 20%, transparent);
+    border-color: var(--card-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--card-primary);
+    outline-offset: 2px;
+  }
+}
+
+// ── LOCKED ────────────────────────────────────────────
+.card--locked {
+  opacity: 0.6;
+  filter: saturate(0.5);
+
+  .accentBar { background: $gray-200; }
+}
+
+// ── COMPLETED ─────────────────────────────────────────
+.card--completed {
+  .accentBar {
+    background: linear-gradient(90deg, var(--card-primary), var(--card-accent));
+  }
+}
+
+// ── HEADER ROW ────────────────────────────────────────
+.header {
+  @include flex-between;
+  margin-bottom: $space-1;
+}
+
+.number {
+  font-family: $font-mono;
+  font-size: $text-xs;
+  font-weight: $weight-bold;
+  color: var(--card-primary);
+  letter-spacing: 1px;
+}
+
+.lockIcon {
+  color: $gray-400;
+}
+
+.completedBadge {
+  font-size: $text-xs;
+  font-weight: $weight-bold;
+  color: $color-success;
+  background: #{$color-success}18;
+  padding: 2px 8px;
+  border-radius: $radius-full;
+}
+
+// ── CLUSTER BADGE ─────────────────────────────────────
+.clusterBadge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: $weight-bold;
+  letter-spacing: 0.5px;
+  padding: 2px 10px;
+  border-radius: $radius-full;
+  width: fit-content;
+}
+
+// ── CONTENT ───────────────────────────────────────────
+.title {
+  font-family: $font-serif;
+  font-size: $text-xl;
+  font-weight: $weight-bold;
+  color: var(--card-text);
+  line-height: $line-tight;
+  margin-top: $space-1;
+}
+
+.subtitle {
+  font-size: $text-sm;
+  color: var(--card-text);
+  opacity: 0.65;
+  line-height: $line-normal;
+  flex: 1;
+}
+
+// ── TAGS ──────────────────────────────────────────────
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-1;
+  margin-top: auto;
+}
+
+.tag {
+  font-size: 10px;
+  color: var(--card-text);
+  opacity: 0.55;
+  background: color-mix(in srgb, var(--card-primary) 10%, transparent);
+  padding: 2px 8px;
+  border-radius: $radius-full;
+}
+
+// ── FOOTER ────────────────────────────────────────────
+.footer {
+  @include flex-between;
+  margin-top: $space-3;
+  padding-top: $space-3;
+  border-top: 1px solid color-mix(in srgb, var(--card-primary) 12%, transparent);
+}
+
+.duration {
+  @include flex-start;
+  gap: $space-1;
+  font-size: $text-xs;
+  color: var(--card-text);
+  opacity: 0.5;
+}
+
+.progressWrap {
+  flex: 1;
+  margin-right: $space-3;
+  height: 4px;
+  background: var(--card-surface);
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--card-primary);
+  border-radius: $radius-full;
+  transition: width 0.5s ease;
+}
+
+.startCta {
+  font-size: $text-sm;
+  font-weight: $weight-bold;
+  color: var(--card-primary);
+}
+
+.comingSoon {
+  font-size: $text-xs;
+  color: $gray-400;
+}

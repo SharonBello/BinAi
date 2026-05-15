@@ -1,0 +1,107 @@
+// ═══════════════════════════════════════════════════════
+// BinAI — Design Tokens
+// Change BRAND section to retheme the entire portal.
+// Module colors live in each module's config.ts (TypeScript).
+// ═══════════════════════════════════════════════════════
+
+// ── BRAND (change these 4 to retheme portal) ─────────
+$brand-primary:   #1D9E75;
+$brand-accent:    #EF9F27;
+$brand-bg:        #FAF6EF;
+$brand-surface:   #E1F5EE;
+
+// ── NEUTRALS ─────────────────────────────────────────
+$gray-50:   #F9F9F7;
+$gray-100:  #F0EEE9;
+$gray-200:  #DDD9D0;
+$gray-400:  #9E9A91;
+$gray-600:  #6B6760;
+$gray-800:  #2E2C28;
+$gray-900:  #1A1916;
+
+// ── SEMANTIC ─────────────────────────────────────────
+$color-success:   #1D9E75;
+$color-warning:   #EF9F27;
+$color-error:     #C0392B;
+$color-info:      #185FA5;
+
+// ── TYPOGRAPHY ───────────────────────────────────────
+$font-primary:  'Heebo', sans-serif;
+$font-serif:    'Frank Ruhl Libre', serif;
+$font-mono:     'Fira Code', monospace;
+
+$text-xs:   11px;
+$text-sm:   13px;
+$text-base: 16px;
+$text-md:   18px;
+$text-lg:   20px;
+$text-xl:   24px;
+$text-2xl:  30px;
+$text-3xl:  36px;
+$text-4xl:  48px;
+
+$weight-regular: 400;
+$weight-medium:  500;
+$weight-bold:    700;
+$weight-black:   900;
+
+$line-tight:   1.25;
+$line-normal:  1.6;
+$line-relaxed: 1.8;
+
+// ── SPACING ──────────────────────────────────────────
+$space-1:  4px;
+$space-2:  8px;
+$space-3:  12px;
+$space-4:  16px;
+$space-5:  20px;
+$space-6:  24px;
+$space-8:  32px;
+$space-10: 40px;
+$space-12: 48px;
+$space-16: 64px;
+$space-20: 80px;
+
+// ── RADIUS ───────────────────────────────────────────
+$radius-sm:  4px;
+$radius-md:  8px;
+$radius-lg:  12px;
+$radius-xl:  16px;
+$radius-2xl: 24px;
+$radius-full: 9999px;
+
+// ── BREAKPOINTS ──────────────────────────────────────
+$bp-xs:  480px;
+$bp-sm:  640px;
+$bp-md:  768px;
+$bp-lg:  1024px;
+$bp-xl:  1280px;
+$bp-2xl: 1440px;
+
+// ── Z-INDEX ──────────────────────────────────────────
+$z-base:    0;
+$z-raised:  10;
+$z-sticky:  100;
+$z-modal:   200;
+$z-toast:   300;
+
+// ── TRANSITIONS ──────────────────────────────────────
+$transition-fast:   all 0.15s ease;
+$transition-normal: all 0.25s ease;
+$transition-slow:   all 0.4s ease;
+
+// ── SHADOWS ──────────────────────────────────────────
+$shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+$shadow-md:  0 4px 12px rgba(0,0,0,0.08);
+$shadow-lg:  0 8px 24px rgba(0,0,0,0.10);
+$shadow-xl:  0 16px 48px rgba(0,0,0,0.12);
+
+// CSS Custom Properties (available globally)
+:root {
+  --brand-primary:   #{$brand-primary};
+  --brand-accent:    #{$brand-accent};
+  --brand-bg:        #{$brand-bg};
+  --brand-surface:   #{$brand-surface};
+  --font-primary:    #{$font-primary};
+  --font-serif:      #{$font-serif};
+}
