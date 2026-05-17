@@ -5,7 +5,7 @@ import { ALL_MODULES } from '@/modules/moduleConfigs';
 
 const MODULE_MAP: Record<string, React.LazyExoticComponent<React.FC>> = {
   m01: lazy(() => import('@/modules/m01-intro')),
-  // m02–m10 added as modules are built
+  m02: lazy(() => import('@/modules/m02-cbt')),
 };
 
 const LoadingScreen = () => (

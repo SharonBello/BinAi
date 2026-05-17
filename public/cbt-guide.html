@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>איך יוצרים כרטיסי שיחה CBT עם AI | מדריך למורים</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700;900&family=Heebo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1A2A3A;
+  --teal: #2A7A6E;
+  --teal-light: #E8F5F2;
+  --gold: #C8954A;
+  --gold-light: #FDF5E8;
+  --red: #C0392B;
+  --red-light: #FDF0EE;
+  --purple: #5B4A8C;
+  --purple-light: #F0EDF8;
+  --green: #2D7A4F;
+  --green-light: #EAF5EE;
+  --cream: #FAF7F2;
+  --warm: #EDE7D8;
+  --muted: #6A7A8A;
+  --border: #D8CFBC;
+  --white: #FFFFFF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  font-size: 19px;
+  line-height: 1.75;
+  color: var(--navy);
+  background: var(--cream);
+  direction: rtl;
+}
+
+/* ── PRINT ── */
+@media print {
+  .no-print { display: none !important; }
+  body { font-size: 14px; background: white; }
+  .page-break { page-break-before: always; }
+  .step-section { page-break-inside: avoid; }
+}
+
+/* ── TOP BAR ── */
+.top-bar {
+  background: var(--navy);
+  color: white;
+  padding: 0 16px 0 20px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.top-bar-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 18px;
+  color: #ECD9B0;
+}
+.progress-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.dot.active { background: #ECD9B0; }
+.print-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.8);
+  padding: 7px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Heebo', sans-serif;
+}
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block;
+  min-height: 100vh; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--navy);
+  padding: 60px 10% 70px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.hero::before {
+  content: '🤖';
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
+  font-size: 120px;
+  opacity: 0.06;
+}
+.hero::after {
+  content: '✨';
+  position: absolute;
+  right: 5%;
+  top: 10%;
+  font-size: 100px;
+  opacity: 0.06;
+}
+.hero-badge {
+  display: inline-block;
+  border: 2px solid rgba(236,217,176,0.4);
+  color: #ECD9B0;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  padding: 6px 20px;
+  border-radius: 30px;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.hero h1 em { color: #8FDFD0; font-style: normal; }
+.hero-sub {
+  font-size: 20px;
+  color: rgba(255,255,255,0.6);
+  max-width: 600px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+}
+.stat-val {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 40px;
+  color: #ECD9B0;
+  line-height: 1;
+}
+.stat-lbl {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+.start-btn {
+  background: #8FDFD0;
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 700;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Heebo', sans-serif;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.start-btn:hover { background: #A8EDE0; transform: translateY(-2px); }
+
+/* ── CONTENT WRAPPER ── */
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 56px 32px;
+}
+
+/* ── PAGE TITLE ── */
+.page-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 38px;
+  color: var(--navy);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.page-intro {
+  font-size: 20px;
+  color: var(--muted);
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+/* ── STEP SECTION ── */
+.step-section {
+  margin-bottom: 48px;
+}
+.step-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.step-number {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: white;
+  font-size: 24px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(42,122,110,0.3);
+}
+.step-title-group {}
+.step-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--teal);
+  margin-bottom: 4px;
+}
+.step-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 28px;
+  color: var(--navy);
+  line-height: 1.2;
+}
+.step-body {
+  font-size: 19px;
+  color: var(--navy);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+.step-body strong { color: var(--teal); font-weight: 700; }
+
+/* ── EXPLANATION BOXES ── */
+.box {
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin: 20px 0;
+  border-right: 5px solid;
+}
+.box-why {
+  background: var(--teal-light);
+  border-color: var(--teal);
+}
+.box-why .box-icon { color: var(--teal); }
+.box-example {
+  background: var(--gold-light);
+  border-color: var(--gold);
+}
+.box-example .box-icon { color: var(--gold); }
+.box-warning {
+  background: var(--red-light);
+  border-color: var(--red);
+}
+.box-warning .box-icon { color: var(--red); }
+.box-tip {
+  background: var(--green-light);
+  border-color: var(--green);
+}
+.box-tip .box-icon { color: var(--green); }
+.box-cbt {
+  background: var(--purple-light);
+  border-color: var(--purple);
+}
+.box-cbt .box-icon { color: var(--purple); }
+
+.box-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.box-icon { font-size: 22px; }
+.box-title {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.box-why .box-title { color: var(--teal); }
+.box-example .box-title { color: var(--gold); }
+.box-warning .box-title { color: var(--red); }
+.box-tip .box-title { color: var(--green); }
+.box-cbt .box-title { color: var(--purple); }
+.box-content {
+  font-size: 18px;
+  color: var(--navy);
+  line-height: 1.8;
+}
+.box-content strong { font-weight: 700; }
+
+/* ── PROMPT BOX ── */
+.prompt-container {
+  background: var(--navy);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+.prompt-header {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.prompt-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.5);
+}
+.copy-btn {
+  background: rgba(143,223,208,0.15);
+  border: 1px solid rgba(143,223,208,0.3);
+  color: #8FDFD0;
+  padding: 6px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.copy-btn:hover { background: rgba(143,223,208,0.25); }
+.copy-btn.copied { color: #A8EDE0; }
+.prompt-text {
+  padding: 24px 28px;
+  font-size: 18px;
+  color: rgba(255,255,255,0.88);
+  line-height: 2;
+  white-space: pre-wrap;
+  font-family: 'Heebo', sans-serif;
+}
+.prompt-highlight {
+  background: rgba(143,223,208,0.2);
+  color: #8FDFD0;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-weight: 600;
+}
+
+/* ── NUMBERED LIST ── */
+.num-list {
+  list-style: none;
+  counter-reset: num;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.num-list li {
+  counter-increment: num;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  font-size: 19px;
+  line-height: 1.7;
+}
+.num-list li::before {
+  content: counter(num);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--warm);
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* ── SCREEN MOCKUP ── */
+.screen-mockup {
+  background: #1E1E2E;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.screen-bar {
+  background: #2A2A3A;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.screen-dot { width: 10px; height: 10px; border-radius: 50%; }
+.screen-url {
+  flex: 1;
+  background: #1A1A28;
+  border-radius: 6px;
+  padding: 4px 12px;
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  font-family: monospace;
+  text-align: center;
+}
+.screen-body {
+  padding: 20px 24px;
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.8;
+}
+.screen-input {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+  font-family: 'Heebo', sans-serif;
+  line-height: 1.7;
+  width: 100%;
+  margin-top: 8px;
+  direction: rtl;
+}
+.screen-input-label {
+  color: rgba(255,255,255,0.4);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.screen-response {
+  background: rgba(143,223,208,0.07);
+  border: 1px solid rgba(143,223,208,0.15);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: rgba(255,255,255,0.8);
+  font-size: 15px;
+  font-family: 'Heebo', sans-serif;
+  line-height: 1.8;
+  margin-top: 12px;
+  direction: rtl;
+}
+.screen-response-label {
+  color: #8FDFD0;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* ── ANATOMY DIAGRAM ── */
+.anatomy {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  margin: 20px 0;
+}
+.anatomy-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.anatomy-prompt {
+  font-size: 17px;
+  line-height: 2;
+  color: var(--navy);
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: var(--cream);
+  border-radius: 8px;
+  direction: rtl;
+}
+.anatomy-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.anatomy-part {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+.anatomy-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.anatomy-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--navy);
+}
+.anatomy-desc strong { font-weight: 700; }
+
+/* ── BEFORE/AFTER ── */
+.before-after {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+@media (max-width: 640px) { .before-after { grid-template-columns: 1fr; } }
+.ba-card {
+  border-radius: 10px;
+  padding: 20px;
+}
+.ba-bad {
+  background: var(--red-light);
+  border: 2px solid var(--red);
+}
+.ba-good {
+  background: var(--green-light);
+  border: 2px solid var(--green);
+}
+.ba-label {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.ba-bad .ba-label { color: var(--red); }
+.ba-good .ba-label { color: var(--green); }
+.ba-text {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--navy);
+}
+.ba-reason {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 10px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 40px 0;
+}
+
+/* ── NAV BUTTONS ── */
+.nav-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.btn-back {
+  background: transparent;
+  border: 2px solid var(--border);
+  color: var(--muted);
+  padding: 12px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.btn-back:hover { border-color: var(--navy); color: var(--navy); }
+.btn-next {
+  background: var(--navy);
+  color: white;
+  border: none;
+  padding: 14px 36px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 17px;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 700;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-next:hover { background: var(--teal); }
+
+/* ── CARD PREVIEW ── */
+.card-preview {
+  background: #FAF6EF;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+  overflow: hidden;
+}
+.card-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgba(42,122,110,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 80%, rgba(212,168,67,0.08) 0%, transparent 50%);
+}
+.card-preview-icon { font-size: 32px; margin-bottom: 12px; position: relative; z-index: 1; }
+.card-preview-q {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 20px;
+  color: var(--navy);
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+  max-width: 80%;
+  margin: 0 auto;
+}
+.card-preview-type {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--teal);
+  margin-top: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── CHECKLIST ── */
+.workshop-check {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+.wc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.wc-item:hover { border-color: var(--teal); }
+.wc-item.done { border-color: var(--teal); background: var(--teal-light); }
+.wc-box {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: all 0.2s;
+}
+.wc-item.done .wc-box { background: var(--teal); border-color: var(--teal); color: white; }
+.wc-text { font-size: 18px; line-height: 1.6; color: var(--navy); }
+
+
+
+/* ── INIGO MEME v3 ── */
+.inigo-meme {
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 28px 0;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  border: 2px solid #2A2A3A;
+}
+.inigo-still {
+  background: linear-gradient(145deg, #12080A 0%, #1A1008 40%, #080A18 100%);
+  padding: 28px 32px 16px;
+  position: relative;
+}
+.inigo-quote-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.inigo-quote-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.inigo-line-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255,200,50,0.15);
+  border: 1px solid rgba(255,200,50,0.3);
+  color: #FFC832;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.inigo-quote-word {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 700;
+  color: #FFFFFF;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8), -1px -1px 0 #000, 1px -1px 0 #000;
+  letter-spacing: 0.5px;
+  direction: rtl;
+}
+.inigo-attribution {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  font-style: italic;
+  font-family: Georgia, serif;
+  text-align: left;
+}
+/* Explain */
+.inigo-explain {
+  background: #1A1A28;
+  padding: 22px 28px;
+}
+.inigo-explain-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 16px;
+}
+.inigo-mapping {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 20px;
+}
+.inigo-map-row {
+  display: grid;
+  grid-template-columns: auto 28px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  direction: rtl;
+}
+.inigo-map-quote {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+  font-style: italic;
+  white-space: nowrap;
+}
+.inigo-map-arrow {
+  color: rgba(143,223,208,0.5);
+  font-size: 18px;
+  text-align: center;
+}
+.inigo-map-right {}
+.inigo-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(143,223,208,0.12);
+  color: #8FDFD0;
+  border: 1px solid rgba(143,223,208,0.2);
+  margin-bottom: 3px;
+}
+.inigo-map-desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 3px;
+}
+.inigo-map-example {
+  font-size: 15px;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Heebo', sans-serif;
+}
+.inigo-result {
+  background: rgba(143,223,208,0.06);
+  border: 1px solid rgba(143,223,208,0.18);
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+.inigo-result-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8FDFD0;
+  margin-bottom: 10px;
+}
+.inigo-result-text {
+  font-size: 16px;
+  line-height: 2;
+  font-family: 'Heebo', sans-serif;
+  direction: rtl;
+  margin-bottom: 8px;
+}
+.inigo-result-colors {
+  text-align: right;
+  opacity: 0.7;
+}
+
+/* ── WORKSHOP POOL ── */
+.pool-option {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+.pool-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+.pool-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.pool-desc {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.pool-steps {
+  font-size: 15px;
+  color: var(--navy);
+  line-height: 2;
+  margin-top: 8px;
+}
+.pool-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  background: var(--teal-light);
+  color: var(--teal);
+}
+.pool-badge.opt { background: var(--gold-light); color: var(--gold); }
+.share-card {
+  background: linear-gradient(135deg, var(--navy) 0%, #2A4A3A 100%);
+  border-radius: 12px;
+  padding: 28px;
+  color: white;
+  margin: 20px 0;
+  text-align: center;
+}
+.share-card h3 {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.share-card p {
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.share-form {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  line-height: 2;
+  direction: rtl;
+  text-align: right;
+}
+
+/* ── PROS CONS ── */
+.pc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+@media(max-width:620px){ .pc-grid{ grid-template-columns:1fr; } }
+.pc-col {
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+.pc-col.pros { background: var(--green-light); border: 2px solid var(--green); }
+.pc-col.cons { background: var(--red-light); border: 2px solid var(--red); }
+.pc-title {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.pc-col.pros .pc-title { color: var(--green); }
+.pc-col.cons .pc-title { color: var(--red); }
+.pc-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--navy);
+}
+.pc-icon { flex-shrink: 0; font-size: 16px; margin-top: 2px; }
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+@media(max-width:620px){ .why-grid{ grid-template-columns:1fr; } }
+.why-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+.why-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.why-card-desc {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.why-card-vs {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+
+/* ── AI TOOLS COMPARISON ── */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+@media(max-width:640px){ .tool-grid { grid-template-columns: 1fr; } }
+.tool-card {
+  border-radius: 12px;
+  border: 2px solid;
+  overflow: hidden;
+}
+.tool-header {
+  padding: 14px 18px 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tool-logo {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.tool-name { font-size: 18px; font-weight: 700; color: white; }
+.tool-maker { font-size: 12px; color: rgba(255,255,255,0.55); }
+.tool-body { background: white; padding: 16px 18px; }
+.tool-best {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 8px;
+}
+.tool-desc { font-size: 16px; color: var(--navy); line-height: 1.65; margin-bottom: 10px; }
+.tool-pros-list { font-size: 15px; color: var(--navy); line-height: 2; }
+.tool-pros-list li { list-style: none; }
+.tool-pros-list li::before { content: "✓ "; color: var(--green); font-weight: 700; }
+.tool-note {
+  font-size: 13px; color: var(--muted); margin-top: 8px;
+  padding-top: 8px; border-top: 1px solid var(--border);
+  font-style: italic;
+}
+/* Gemini */
+.tool-card.gemini { border-color: #1A73E8; }
+.tool-card.gemini .tool-header { background: linear-gradient(135deg, #1A73E8, #4285F4); }
+.tool-card.gemini .tool-best { color: #1A73E8; }
+/* ChatGPT */
+.tool-card.chatgpt { border-color: #10A37F; }
+.tool-card.chatgpt .tool-header { background: linear-gradient(135deg, #10A37F, #1DB880); }
+.tool-card.chatgpt .tool-best { color: #10A37F; }
+/* Claude */
+.tool-card.claude { border-color: #C8954A; }
+.tool-card.claude .tool-header { background: linear-gradient(135deg, #C8954A, #E0B060); }
+.tool-card.claude .tool-best { color: #C8954A; }
+/* Copilot */
+.tool-card.copilot { border-color: #5B4A8C; }
+.tool-card.copilot .tool-header { background: linear-gradient(135deg, #5B4A8C, #7A6AB0); }
+.tool-card.copilot .tool-best { color: #5B4A8C; }
+
+/* ── ONLINE CARD TOOLS ── */
+.online-tool {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.online-tool-icon {
+  font-size: 36px; flex-shrink: 0;
+}
+.online-tool-name {
+  font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px;
+}
+.online-tool-type {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--teal); margin-bottom: 6px;
+}
+.online-tool-desc {
+  font-size: 16px; color: var(--muted); line-height: 1.65;
+}
+.online-tool-steps {
+  font-size: 15px; color: var(--navy); margin-top: 8px; line-height: 1.9;
+}
+.tool-badge-free {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px;
+  background: var(--green-light); color: var(--green);
+  border: 1px solid var(--green); margin-right: 6px;
+}
+.tool-badge-paid {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px;
+  background: var(--gold-light); color: var(--gold);
+  border: 1px solid var(--gold); margin-right: 6px;
+}
+
+/* ── GIVAT HALFON MEME ── */
+.givat-meme { }
+.givat-quote-bar {
+  background: rgba(0,0,0,0.85);
+  padding: 14px 24px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.givat-quote-main {
+  font-family: 'Frank Ruhl Libre', Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.6;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+  direction: rtl;
+  text-align: right;
+}
+.givat-source {
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 6px;
+  font-style: italic;
+  text-align: left;
+}
+.givat-closer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.75;
+  direction: rtl;
+  text-align: right;
+  font-style: italic;
+}
+.givat-closer em { color: #8FDFD0; font-style: normal; font-weight: 600; }
+.givat-closer strong { color: #ECD9B0; }
+
+/* ── TOP NAV TABS ── */
+.nav-tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1;
+  height: 100%;
+  gap: 0;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab {
+  padding: 0 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  white-space: nowrap;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  transition: all 0.15s;
+  user-select: none;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.8); }
+.nav-tab.active { color: #8FDFD0; border-bottom: 2px solid #8FDFD0; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar no-print">
+  <div class="top-bar-title">כרטיסי שיחה CBT · AI</div>
+  <nav class="nav-tabs" id="mainNav">
+    <div class="nav-tab active" onclick="navTo(0,'מבוא')">מבוא</div>
+    <div class="nav-tab" onclick="navTo('p_why','למה AI')">למה AI?</div>
+    <div class="nav-tab" onclick="navTo('p_tools','כלים')">השוואת כלים</div>
+    <div class="nav-tab" onclick="navTo(1,'CBT')">מהו CBT?</div>
+    <div class="nav-tab" onclick="navTo(2,'כניסה')">שלב 1</div>
+    <div class="nav-tab" onclick="navTo(3,'אנטומיה')">שלב 2</div>
+    <div class="nav-tab" onclick="navTo(4,'פרומפט')">שלב 3</div>
+    <div class="nav-tab" onclick="navTo(5,'פרומפטים')">שלב 4</div>
+    <div class="nav-tab" onclick="navTo('p_ideas','רעיונות')">אין רעיונות?</div>
+    <div class="nav-tab" onclick="navTo(6,'שיפור')">שלב 5</div>
+    <div class="nav-tab" onclick="navTo(7,'הדפסה')">שלב 6</div>
+    <div class="nav-tab" onclick="navTo(8,'סיכום')">סיכום</div>
+    <div class="nav-tab" onclick="navTo('p_online','דיגיטלי')">כלים דיגיטליים</div>
+    <div class="nav-tab" onclick="navTo(9,'מאגר')">מאגר</div>
+  </nav>
+  <button class="print-btn" onclick="window.print()">🖨️ הדפס</button>
+</div>
+
+<!-- ================================================================
+     PAGE 0: HERO
+================================================================ -->
+<div class="section active" id="p0">
+  <div class="hero">
+    <div class="hero-badge">סדנה מעשית · עברית · למתחילים לחלוטין</div>
+    <h1>איך יוצרים<br><em>כרטיסי שיחה CBT</em><br>עם בינה מלאכותית</h1>
+    <p class="hero-sub">מדריך שלב אחר שלב — גם אם מעולם לא השתמשת ב-ChatGPT או Gemini</p>
+    <div class="hero-stats">
+      <div><div class="stat-val">7</div><div class="stat-lbl">שלבים פשוטים</div></div>
+      <div><div class="stat-val">15</div><div class="stat-lbl">דקות להכין כרטיס</div></div>
+      <div><div class="stat-val">₪0</div><div class="stat-lbl">עלות</div></div>
+    </div>
+    <button class="start-btn" onclick="go(1)">בואו נתחיל ←</button>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE 1: מה אנחנו הולכים לעשות?
+================================================================ -->
+<div class="section" id="p1">
+<div class="content">
+  <div class="page-title">🌟 מה אנחנו הולכים לעשות?</div>
+  <p class="page-intro">לפני שמתחילים — בואו נבין מה המטרה, ולמה זה שווה 15 דקות מהזמן שלכם.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">המטרה</div>
+        <div class="step-title">אנחנו יוצרים כרטיסי שיחה — לא שקופיות PowerPoint PPT</div>
+      </div>
+    </div>
+    <p class="step-body">
+      <strong>כרטיס שיחה</strong> הוא פיסת נייר קטנה עם שאלה אחת בלבד. אתם מניחים אותה על השולחן, ותלמיד מגיב אליה. זהו.<br><br>
+      אנחנו הולכים ללמוד איך להגיד לכלי AI לייצר עבורנו 6–9 כרטיסים כאלה תוך דקות — ולאחר מכן להדפיס אותם.
+    </p>
+
+    <div class="box box-cbt">
+      <div class="box-header"><span class="box-icon">🧠</span><span class="box-title">למה CBT?</span></div>
+      <div class="box-content">
+        CBT — טיפול קוגניטיבי התנהגותי — הוכח מחקרית כיעיל לניהול רגשות, קשיי חברות וחרדה.<br><br>
+        שאלות CBT טובות עוזרות לתלמיד לעצור, לחשוב ולהגיב אחרת. הן לא "ספר לי על הרגש שלך" — הן עושות <strong>עבודה</strong>.<br><br>
+        <strong>דוגמה לשאלת CBT טובה:</strong> "מה היית אומר לחבר שמרגיש כמוך?"<br>
+        <strong>דוגמה לשאלה שאינה CBT:</strong> "איך אתה מרגיש?"
+      </div>
+    </div>
+
+    <div class="before-after">
+      <div class="ba-card ba-bad">
+        <div class="ba-label">❌ שאלה רגילה</div>
+        <div class="ba-text">"איך אתה מרגיש?"</div>
+        <div class="ba-reason">שאלה כללית — לא מובילה לחשיבה. התלמיד אומר "בסדר" ויוצא.</div>
+      </div>
+      <div class="ba-card ba-good">
+        <div class="ba-label">✓ שאלת CBT</div>
+        <div class="ba-text">"מה המחשבה שעברה לך בראש כשזה קרה?"</div>
+        <div class="ba-reason">מכוונת לתהליך — מחייבת עצירה ורפלקציה אמיתית.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">הכלים</div>
+        <div class="step-title">אנחנו משתמשים ב-ChatGPT או ב-Gemini — שניהם חינמיים</div>
+      </div>
+    </div>
+    <p class="step-body">לא צריך לשלם. לא צריך להתקין. צריך רק:</p>
+    <ol class="num-list">
+      <li>חיבור לאינטרנט</li>
+      <li>חשבון Google (אם יש לכם Gmail — יש לכם חשבון Google)</li>
+      <li>כ-15 דקות</li>
+    </ol>
+    <div class="box box-tip">
+      <div class="box-header"><span class="box-icon">💡</span><span class="box-title">איזה כלי לבחור?</span></div>
+      <div class="box-content">
+        <strong>Gemini</strong> (של Google): אם יש לכם Gmail — התחברות אוטומטית. כנסו ל-<strong>gemini.google.com</strong><br><br>
+        <strong>ChatGPT</strong> (של OpenAI): צריך להירשם. כנסו ל-<strong>chatgpt.com</strong> ולחצו "Sign up"<br><br>
+        המלצה: אם אתם משתמשים ב-Gmail — תתחילו עם Gemini. הוא הקל ביותר לכניסה ראשונה.
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(0)">→ חזרה</button>
+    <button class="btn-next" onclick="go('p_tools')" style="background:#5B4A8C;">השוואת כלים ←</button>
+    <button class="btn-next" onclick="go('p_why')" style="background:#1A5276;">למה AI? יתרונות ←</button>
+    <button class="btn-next" onclick="go(2)">המשך: שלב 1 ←</button>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================
+     PAGE 2: שלב 1 — כניסה לכלי
+================================================================ -->
+<div class="section" id="p2">
+<div class="content">
+  <div class="page-title">📱 שלב 1: נכנסים לכלי</div>
+  <p class="page-intro">בשלב זה תפתחו את הכלי ותוודאו שאתם מחוברים. זה לוקח 2 דקות.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">כניסה ל-Gemini</div>
+        <div class="step-title">פתחו דפדפן וכנסו לכתובת</div>
+      </div>
+    </div>
+    <p class="step-body">בשורת הכתובת של הדפדפן (למעלה), הקלידו:</p>
+    <div class="screen-mockup">
+      <div class="screen-bar">
+        <div class="screen-dot" style="background:#FF5F56"></div>
+        <div class="screen-dot" style="background:#FEBC2E"></div>
+        <div class="screen-dot" style="background:#28C840"></div>
+        <div class="screen-url">gemini.google.com</div>
+      </div>
+      <div class="screen-body">
+        כנסו לכתובת: <strong style="color:#8FDFD0">gemini.google.com</strong><br>
+        <br>
+        אתם תראו עמוד כמו זה. אם אתם מחוברים ל-Gmail — הכלי יזהה אתכם אוטומטית.
+      </div>
+    </div>
+
+    <div class="box box-warning">
+      <div class="box-header"><span class="box-icon">⚠️</span><span class="box-title">לא מחוברים?</span></div>
+      <div class="box-content">
+        אם הכלי מבקש התחברות — לחצו על הכפתור הכחול <strong>"Sign in with Google"</strong> והשתמשו בחשבון Gmail שלכם.<br><br>
+        אין לכם Gmail? בקשו מעמית לעזור לכם להירשם. זה לוקח 3 דקות.
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">מה אתם רואים</div>
+        <div class="step-title">מצאו את תיבת הטקסט</div>
+      </div>
+    </div>
+    <p class="step-body">אחרי הכניסה, תראו מסך פשוט עם תיבת טקסט — שם תקלידו את הבקשה שלכם. תיבה זו נקראת <strong>"שדה הפרומפט"</strong>.</p>
+
+    <div class="screen-mockup">
+      <div class="screen-bar">
+        <div class="screen-dot" style="background:#FF5F56"></div>
+        <div class="screen-dot" style="background:#FEBC2E"></div>
+        <div class="screen-dot" style="background:#28C840"></div>
+        <div class="screen-url">gemini.google.com</div>
+      </div>
+      <div class="screen-body">
+        <div class="screen-input-label">כאן תקלידו את הבקשה שלכם (שדה הפרומפט)</div>
+        <div class="screen-input">✏️ הקלידו כאן את הבקשה שלכם...</div>
+      </div>
+    </div>
+
+    <div class="box box-why">
+      <div class="box-header"><span class="box-icon">🤔</span><span class="box-title">מה זה "פרומפט"?</span></div>
+      <div class="box-content">
+        <strong>פרומפט</strong> = הבקשה שאתם מקלידים לכלי ה-AI.<br><br>
+        ה-AI הוא כמו עוזר מאוד מיומן שמחכה להוראות. ככל שההוראה שלכם ברורה יותר — התוצאה טובה יותר.<br><br>
+        בשיעורים הבאים נלמד בדיוק <strong>איך לכתוב פרומפט טוב</strong> שמייצר כרטיסי שיחה מושלמים.
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(1)">→ חזרה</button>
+    <button class="btn-next" onclick="go(3)">המשך: שלב 2 ←</button>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================
+     PAGE 3: שלב 2 — אנטומיה של פרומפט טוב
+================================================================ -->
+<div class="section" id="p3">
+<div class="content">
+  <div class="page-title">🔬 שלב 2: אנטומיה של פרומפט טוב</div>
+  <p class="page-intro">זה השלב החשוב ביותר. לא כל בקשה ל-AI מייצרת כרטיסים טובים. בואו נלמד מה ההבדל.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">העיקרון</div>
+        <div class="step-title">פרומפט טוב מכיל 4 רכיבים</div>
+      </div>
+    </div>
+    <p class="step-body">כל פרומפט שיוצר כרטיסי שיחה CBT טובים חייב לכלול את ארבעת הרכיבים הבאים:</p>
+
+    <div class="anatomy">
+      <div class="anatomy-title">4 רכיבי הפרומפט המושלם</div>
+      <div class="anatomy-parts">
+        <div class="anatomy-part" style="background:#EAF5EE;">
+          <div class="anatomy-color" style="background:#2D7A4F;"></div>
+          <div class="anatomy-desc"><strong>רכיב 1: תפקיד</strong> — מי אתם מבקשים מה-AI להיות? "אתה מומחה CBT ליל<!-- GIVAT HALFON MNEMONIC — 4 parts of a good prompt -->
+  <div class="inigo-meme givat-meme">
+
+    <!-- TOP: Movie still -->
+    <img src="data:image/png;base64,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"
+         alt="גבעת חלפון אינה עונה — מר חסון, אני באתי לדבר איתך..."
+         style="width:100%;display:block;">
+      <div class="givat-source">גבעת חלפון אינה עונה</div>
+    </div>
+
+    <!-- Mapping section -->
+    <div class="inigo-explain">
+      <div class="inigo-explain-title">🎬 כמו בגבעת חלפון — גם AI צריך לדעת מתי לעבור לחליפה</div>
+
+      <div class="inigo-mapping">
+
+        <div class="inigo-map-row">
+          <div class="inigo-map-quote">"מר חסון..."</div>
+          <div class="inigo-map-arrow">←</div>
+          <div class="inigo-map-right">
+            <div class="inigo-tag" style="background:rgba(200,60,60,0.15);color:#E07070;border-color:rgba(200,60,60,0.3);">1 · תפקיד</div>
+            <div class="inigo-map-desc">למי פונים? מי בעל הסמכות? ה-AI אינו "סתם צ'אט" — הגדירו לו תפקיד ברור.</div>
+            <div class="inigo-map-example">"אתה מומחה CBT לחינוך."</div>
+          </div>
+        </div>
+
+        <div class="inigo-map-row">
+          <div class="inigo-map-quote">"בקשר לידך של בתך..."</div>
+          <div class="inigo-map-arrow">←</div>
+          <div class="inigo-map-right">
+            <div class="inigo-tag" style="background:rgba(60,120,200,0.15);color:#70A0E0;border-color:rgba(60,120,200,0.3);">2 · קשר ורקע</div>
+            <div class="inigo-map-desc">מה הסיטואציה? ה-AI צריך להבין: גיל, קהל, צורך, תחום.</div>
+            <div class="inigo-map-example">"לתלמידי כיתה ה', גיל 10, על קשיי חברות."</div>
+          </div>
+        </div>
+
+        <div class="inigo-map-row">
+          <div class="inigo-map-quote">"אני באתי לדבר איתך..."</div>
+          <div class="inigo-map-arrow">←</div>
+          <div class="inigo-map-right">
+            <div class="inigo-tag" style="background:rgba(200,160,60,0.15);color:#E0C070;border-color:rgba(200,160,60,0.3);">3 · משימה</div>
+            <div class="inigo-map-desc">מה הפעולה המבוקשת? לא מספיק לתת רקע — צריך לומר מה לעשות.</div>
+            <div class="inigo-map-example">"צור 6 כרטיסי שיחה בעברית."</div>
+          </div>
+        </div>
+
+        <div class="inigo-map-row" style="border-bottom:none;">
+          <div class="inigo-map-quote">"אני צריך לעבור לחליפה."</div>
+          <div class="inigo-map-arrow">←</div>
+          <div class="inigo-map-right">
+            <div class="inigo-tag" style="background:rgba(160,80,200,0.15);color:#C0A0E0;border-color:rgba(160,80,200,0.3);">4 · פורמט</div>
+            <div class="inigo-map-desc">באיזה לבוש התשובה צריכה להגיע? הפורמט הוא ה"חליפה" של התשובה.</div>
+            <div class="inigo-map-example">"כל כרטיס: שם + שאלה פתוחה + משפט השלמה."</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Assembled prompt -->
+      <div class="inigo-result">
+        <div class="inigo-result-label">✅ 1+2+3+4 = הפרומפט המוגמר:</div>
+        <div class="inigo-result-text">
+          <span style="color:#E07070;">אתה מומחה CBT לחינוך.</span>
+          <span style="color:#70A0E0;"> לתלמידי כיתה ה', גיל 10, על קשיי חברות.</span>
+          <span style="color:#E0C070;"> צור 6 כרטיסי שיחה בעברית.</span>
+          <span style="color:#C0A0E0;"> כל כרטיס: שם + שאלה פתוחה + משפט השלמה.</span>
+        </div>
+        <div style="text-align:right;margin-top:8px;font-size:12px;opacity:0.65;">
+          <span style="color:#E07070;">■ תפקיד</span>&nbsp;&nbsp;
+          <span style="color:#70A0E0;">■ קשר ורקע</span>&nbsp;&nbsp;
+          <span style="color:#E0C070;">■ משימה</span>&nbsp;&nbsp;
+          <span style="color:#C0A0E0;">■ פורמט</span>
+        </div>
+      </div>
+
+      <!-- Closing line -->
+      <div class="givat-closer">
+        פרומפט טוב הוא לא רק <em>מה</em> מבקשים מה-AI — אלא <em>באיזה תפקיד</em>, <em>באיזה הקשר</em>, <em>לאיזו משימה</em>, ובאיזו <strong>"חליפה"</strong> התשובה צריכה להגיע.
+      </div>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">לפני ואחרי</div>
+        <div class="step-title">ראו את ההבדל בין פרומפט חלש לחזק</div>
+      </div>
+    </div>
+
+    <div class="before-after">
+      <div class="ba-card ba-bad">
+        <div class="ba-label">❌ פרומפט חלש</div>
+        <div class="ba-text">"תעשה לי כרטיסים לשיחה עם תלמידים"</div>
+        <div class="ba-reason">לא ברור: איזה גיל? איזה נושא? כמה כרטיסים? פורמט כלשהו? ה-AI ינחש ותקבלו משהו גנרי ולא שימושי.</div>
+      </div>
+      <div class="ba-card ba-good">
+        <div class="ba-label">✓ פרומפט חזק</div>
+        <div class="ba-text">"אתה מומחה CBT. צור 6 כרטיסי שיחה לתלמידי כיתה ה' (גיל 10) על קשיי חברות. כל כרטיס: שם + שאלה פתוחה + משפט השלמה."</div>
+        <div class="ba-reason">ה-AI מקבל מסגרת ברורה — התוצאה תהיה מדויקת ושימושית.</div>
+      </div>
+    </div>
+
+    <div class="box box-cbt">
+      <div class="box-header"><span class="box-icon">🧠</span><span class="box-title">למה פורמט CBT חשוב?</span></div>
+      <div class="box-content">
+        אם לא תבקשו מה-AI לכתוב בפורמט CBT — הוא ייצר שאלות כלליות.<br><br>
+        <strong>שאלה כללית:</strong> "ספר לי על עצמך" — אין כאן עיבוד קוגניטיבי<br>
+        <strong>שאלת CBT:</strong> "מה מחשבה אחת שעברה לך כשקרה המקרה?" — מכוונת לעיבוד<br><br>
+        לכן הפרומפט הטוב יראה כך: "אתה מומחה CBT. צור 6 כרטיסי שיחה לתלמידי כיתה ה' (גיל 10) על קשיי חברות. כל כרטיס: שם + שאלה פתוחה + משפט השלמה."
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(2)">→ חזרה</button>
+    <button class="btn-next" onclick="go(4)">המשך: שלב 3 ←</button>
+  </div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- ================================================================
+     PAGE 4: שלב 3 — הפרומפט הראשון שלכם
+================================================================ -->
+<div class="section" id="p4">
+<div class="content">
+  <div class="page-title">✏️ שלב 3: הפרומפט הראשון שלכם</div>
+  <p class="page-intro">הגענו לחלק המעשי. כאן תעתיקו פרומפט, תדביקו ותקבלו את הכרטיסים הראשונים שלכם.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">פרומפט מוכן להעתקה</div>
+        <div class="step-title">העתיקו, שנו את הפרטים בסוגריים, הדביקו</div>
+      </div>
+    </div>
+
+    <div class="box box-tip">
+      <div class="box-header"><span class="box-icon">📋</span><span class="box-title">איך להשתמש בפרומפט הזה</span></div>
+      <div class="box-content">
+        <ol class="num-list">
+          <li>לחצו על כפתור <strong>"העתק"</strong> (בצד שמאל של הפרומפט)</li>
+          <li>עברו לכלי ה-AI (Gemini / ChatGPT)</li>
+          <li>לחצו בתיבת הטקסט ואחר כך <strong>Ctrl+V</strong> (או לחיצה ימנית → הדבק)</li>
+          <li>שנו את הפרטים בסוגריים [ ] לפי הכיתה שלכם</li>
+          <li>לחצו Enter (או על כפתור השליחה)</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="prompt-container">
+      <div class="prompt-header">
+        <div class="prompt-label">פרומפט בסיסי — כרטיסי שיחה CBT</div>
+        <button class="copy-btn" onclick="copyText(this,'t1')">העתק</button>
+      </div>
+      <div class="prompt-text" id="t1">אתה מומחה ל-CBT (טיפול קוגניטיבי התנהגותי) ומומחה לחינוך.
+
+צור בעברית 6 כרטיסי שיחה CBT לתלמידים בגיל [10–11, כיתה ה'].
+הנושא: [קשיי חברות / חרדת בחינות / ניהול כעסים — בחרו אחד].
+
+לכל כרטיס צור:
+• שם לכרטיס (2–3 מילים)
+• שאלה פתוחה אחת מבוססת CBT (מכוונת לחשיבה)
+• משפט השלמה אחד ("אני מרגיש ___ כי ___")
+
+חשוב:
+- שפה פשוטה ונגישה לגיל
+- שאלות שמכוונות לזיהוי מחשבות ורגשות
+- לא שאלות שניתן לענות עליהן "כן" או "לא"</div>
+    </div>
+
+    <div class="box box-example">
+      <div class="box-header"><span class="box-icon">📝</span><span class="box-title">דוגמה: מה אמורה להיות התוצאה</span></div>
+      <div class="box-content">
+        אחרי שתשלחו את הפרומפט, תקבלו משהו כזה:
+      </div>
+    </div>
+
+    <div class="screen-mockup">
+      <div class="screen-bar">
+        <div class="screen-dot" style="background:#FF5F56"></div>
+        <div class="screen-dot" style="background:#FEBC2E"></div>
+        <div class="screen-dot" style="background:#28C840"></div>
+        <div class="screen-url">gemini.google.com</div>
+      </div>
+      <div class="screen-body">
+        <div class="screen-response-label">תגובת ה-AI</div>
+        <div class="screen-response">
+          <strong>כרטיס 1: "מה עובר לי?"</strong><br>
+          שאלה: "מה המחשבה הראשונה שעברה לך בראש כשהחבר שלך התעלם ממך?"<br>
+          השלמה: "באותו רגע הרגשתי ___ כי ___"<br><br>
+          <strong>כרטיס 2: "מה אמרתי לעצמי?"</strong><br>
+          שאלה: "מה סיפרת לעצמך על הסיטואציה? האם הסיפור הזה עוזר לך?"<br>
+          השלמה: "לעצמי אמרתי ___ אבל ייתכן שגם ___"<br><br>
+          <em>... ועוד 4 כרטיסים ...</em>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">הבנת התוצאה</div>
+        <div class="step-title">כיצד לבדוק שהכרטיסים טובים?</div>
+      </div>
+    </div>
+    <p class="step-body">לאחר שקיבלתם תוצאה, בדקו 3 דברים:</p>
+    <div class="workshop-check">
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text"><strong>האם השאלות פתוחות?</strong> — תלמיד לא יכול לענות "כן" או "לא"</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text"><strong>האם הן מכוונות לחשיבה?</strong> — "מה עבר לך בראש" ולא "איך הרגשת"</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text"><strong>האם הן מתאימות לגיל?</strong> — שפה פשוטה, לא מתנשאת</div>
+      </div>
+    </div>
+
+    <div class="box box-warning">
+      <div class="box-header"><span class="box-icon">⚠️</span><span class="box-title">אם התוצאה לא טובה</span></div>
+      <div class="box-content">
+        זה קורה! אל תמחקו — פשוט הוסיפו הנחיה נוספת בצ'אט:<br><br>
+        <strong>"הכרטיסים טובים אבל השאלות קצת מורכבות מדי. אנא פשט אותן לגיל 10."</strong><br><br>
+        או: <strong>"כרטיס 3 לא מבוסס CBT. אנא כתוב אותו מחדש עם שאלה שמכוונת לזיהוי מחשבות."</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(3)">→ חזרה</button>
+    <button class="btn-next" onclick="go(5)">המשך: שלב 4 ←</button>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================
+     PAGE 5: שלב 4 — 5 פרומפטים מוכנים לכל נושא
+================================================================ -->
+<div class="section" id="p5">
+<div class="content">
+  <div class="page-title">📚 שלב 4: פרומפטים מוכנים לכל נושא</div>
+  <p class="page-intro">כאן תמצאו פרומפטים מוכנים לחמשת הנושאים הנפוצים ביותר. העתיקו, הדביקו — זהו.</p>
+
+  <!-- פרומפט: קשיי חברות -->
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number" style="background:#2A7A6E;">🤝</div>
+      <div class="step-title-group">
+        <div class="step-label" style="color:#2A7A6E;">נושא 1</div>
+        <div class="step-title">קשיי חברות ויחסים בין-אישיים</div>
+      </div>
+    </div>
+    <div class="box box-cbt" style="margin-bottom:12px;">
+      <div class="box-content"><strong>למה זה CBT?</strong> שאלות אלה מכוונות לזיהוי דפוסי מחשבה בסיטואציות חברתיות — "מה אמרתי לעצמי" ו"מה יכולתי להגיב אחרת" הם ליבת הגישה הקוגניטיבית.</div>
+    </div>
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">כרטיסי חברות</div><button class="copy-btn" onclick="copyText(this,'t2')">העתק</button></div>
+      <div class="prompt-text" id="t2">אתה מומחה CBT לחינוך. צור בעברית 6 כרטיסי שיחה לתלמידי [כיתה ד'-ו'] על קשיי חברות.
+
+כל כרטיס יכלול:
+• שם (2-3 מילים)
+• שאלת CBT: שאלה שמכוונת לזיהוי מחשבה אוטומטית בסיטואציה חברתית
+• משפט השלמה: "כשזה קרה, חשבתי ש___ ולכן ___"
+
+נושאים לגעת בהם: קנאה, ריב עם חבר, תחושת בדידות, רצון להשתייך, בקשת סליחה, פחד מדחייה.
+שפה: פשוטה, חמה, לא שיפוטית.</div>
+    </div>
+    <div class="card-preview">
+      <div class="card-preview-icon">🤝</div>
+      <div class="card-preview-q">"מה עבר לך בראש כשהחבר שלך בחר לשחק עם מישהו אחר?"</div>
+      <div class="card-preview-type">כרטיס חברות · CBT מחשבות אוטומטיות</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- פרומפט: חרדת בחינות -->
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number" style="background:#C8954A;">📝</div>
+      <div class="step-title-group">
+        <div class="step-label" style="color:#C8954A;">נושא 2</div>
+        <div class="step-title">חרדת בחינות ולחץ לימודי</div>
+      </div>
+    </div>
+    <div class="box box-example" style="margin-bottom:12px;">
+      <div class="box-content"><strong>למה זה CBT?</strong> חרדת בחינות מבוססת לרוב על מחשבות כמו "אני אכשל" ו"כולם ינצחו אותי". CBT עוזר לבדוק את המחשבות האלה — "מה הראיות?" ו"מה המחשבה הכי שימושית עכשיו?"</div>
+    </div>
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">כרטיסי חרדת בחינות</div><button class="copy-btn" onclick="copyText(this,'t3')">העתק</button></div>
+      <div class="prompt-text" id="t3">אתה מומחה CBT לחינוך. צור בעברית 6 כרטיסי שיחה לתלמידי [כיתה ה'-ז'] על חרדת בחינות ולחץ לימודי.
+
+כל כרטיס:
+• שם קצר
+• שאלת CBT: בדיקת מחשבות — "מה אמרת לעצמך?", "האם המחשבה עוזרת לך?", "מה עדות אחרת?"
+• משפט השלמה: "לפני הבחינה אני תמיד חושב/ת ש___, אבל ייתכן שגם ___"
+
+גוון את הכרטיסים: לפני הבחינה, בזמן הבחינה, אחרי הכישלון, פחד מהשוואה לאחרים, קושי להתכונן.</div>
+    </div>
+    <div class="card-preview" style="--wash-a:#C8954A;">
+      <div class="card-preview-icon">📝</div>
+      <div class="card-preview-q">"מה המחשבה הכי מפחידה שעוברת לך לפני בחינה? האם יש ראיות שהיא נכונה?"</div>
+      <div class="card-preview-type">כרטיס חרדה · CBT בדיקת מחשבות</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- פרומפט: ניהול כעסים -->
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number" style="background:#C0392B;">😤</div>
+      <div class="step-title-group">
+        <div class="step-label" style="color:#C0392B;">נושא 3</div>
+        <div class="step-title">ניהול כעסים ורגשות עזים</div>
+      </div>
+    </div>
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">כרטיסי כעסים</div><button class="copy-btn" onclick="copyText(this,'t4')">העתק</button></div>
+      <div class="prompt-text" id="t4">אתה מומחה CBT לחינוך. צור בעברית 6 כרטיסי שיחה לתלמידים על ניהול כעסים וויסות רגשות.
+
+לכל כרטיס:
+• שם קצר
+• שאלת CBT: מה קרה → מה חשבתי → מה עשיתי → מה יכולתי לעשות אחרת
+• משפט השלמה: "כשאני כועס/ת אני בדרך כלל ___, אבל אחרי שהרגעתי מתחרט/ת כי ___"
+
+גוון: הטריגר לכעס, מחשבות בשיא הכעס, גוף בזמן כעס, כלי הרגעה, התנצלות אחרי כעס, מחשבה אחרת אפשרית.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- פרומפט: כוחות -->
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number" style="background:#5B4A8C;">⭐</div>
+      <div class="step-title-group">
+        <div class="step-label" style="color:#5B4A8C;">נושא 4</div>
+        <div class="step-title">חיזוק עצמי וזיהוי כוחות</div>
+      </div>
+    </div>
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">כרטיסי כוחות</div><button class="copy-btn" onclick="copyText(this,'t5')">העתק</button></div>
+      <div class="prompt-text" id="t5">אתה מומחה CBT לחינוך. צור בעברית 6 כרטיסי שיחה לתלמידים על זיהוי כוחות אישיים וחיזוק עצמי.
+
+לכל כרטיס:
+• שם הכוח (חוסן / יצירתיות / אמפתיה / ...)
+• שאלת CBT: שאלה שמזמינה את התלמיד להיזכר בפעם שהפגין כוח זה — "ספר על פעם ש..."
+• משפט חיזוק: "הכוח הזה עזר לי כש___, ובעתיד אוכל להשתמש בו כש___"
+
+גישה: חיובית, מעצימה, ממוקדת בהצלחות עבר ולא בחסרונות.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- פרומפט: מעקב -->
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number" style="background:#2D7A4F;">🔄</div>
+      <div class="step-title-group">
+        <div class="step-label" style="color:#2D7A4F;">נושא 5</div>
+        <div class="step-title">שיחת מעקב — אחרי שיחה קודמת</div>
+      </div>
+    </div>
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">כרטיסי מעקב</div><button class="copy-btn" onclick="copyText(this,'t6')">העתק</button></div>
+      <div class="prompt-text" id="t6">אתה מומחה CBT לחינוך. צור בעברית 5 שאלות מעקב לשיחה שנייה עם תלמיד.
+
+הרקע: בשיחה הקודמת התלמיד שיתף ש[כאן תכתבו מה שיתף — למשל: "הוא מרגיש שאף אחד לא אוהב אותו"].
+
+השאלות יכוונו ל:
+1. מה השתנה מאז השיחה?
+2. האם ניסה משהו מהשיחה הקודמת?
+3. האם המחשבה השתנתה?
+4. מה עדיין קשה?
+5. מה צעד קטן לשבוע הבא?
+
+שפה: חמה, לא שיפוטית, מראה שהייתי קשוב לשיחה הקודמת.</div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(4)">→ חזרה</button>
+    <button class="btn-next" onclick="go('p_online')" style="background:#2A7A6E; margin-left:10px;">כלים דיגיטליים ←</button>
+    <button class="btn-next" onclick="go('p_ideas')" style="background:#5B4A8C; margin-left:10px;">אין לי רעיונות? ←</button>
+    <button class="btn-next" onclick="go(6)">המשך: שלב 5 ←</button>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================
+     PAGE 6: שלב 5 — שיפור ועידון
+================================================================ -->
+<div class="section" id="p6">
+<div class="content">
+  <div class="page-title">🛠️ שלב 5: לשפר את מה שקיבלתם</div>
+  <p class="page-intro">ה-AI לא תמיד מייצר את הכרטיס המושלם בניסיון ראשון. זה בסדר — ואפשר לשפר בשניות.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">בקשות שיפור</div>
+        <div class="step-title">3 בקשות שיפור שכל מורה צריך לדעת</div>
+      </div>
+    </div>
+
+    <p class="step-body">אחרי שקיבלתם תגובה — אל תיגעו בה. פשוט הוסיפו הודעה חדשה בצ'אט:</p>
+
+    <div class="prompt-container" style="margin-bottom:12px;">
+      <div class="prompt-header"><div class="prompt-label">פשוט את השפה</div><button class="copy-btn" onclick="copyText(this,'imp1')">העתק</button></div>
+      <div class="prompt-text" id="imp1">הכרטיסים טובים, אבל השפה קצת מורכבת לגיל שלי. אנא כתוב אותם מחדש בשפה פשוטה יותר — מילים קצרות, משפטים קצרים, כאילו אתה מדבר ישירות עם ילד בן 10.</div>
+    </div>
+
+    <div class="prompt-container" style="margin-bottom:12px;">
+      <div class="prompt-header"><div class="prompt-label">חזק את ה-CBT</div><button class="copy-btn" onclick="copyText(this,'imp2')">העתק</button></div>
+      <div class="prompt-text" id="imp2">כרטיס [מספר] לא מרגיש מספיק CBT. הוא יותר כמו שאלה כללית. אנא כתוב אותו מחדש כך שישאל ספציפית על: מחשבות אוטומטיות, ראיות לעומת נגד, או חשיבה אלטרנטיבית.</div>
+    </div>
+
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">הוסף נושא ספציפי</div><button class="copy-btn" onclick="copyText(this,'imp3')">העתק</button></div>
+      <div class="prompt-text" id="imp3">תוסיף כרטיס נוסף על הנושא הספציפי של [למשל: "תלמיד שמרגיש שמורה לא אוהב אותו"]. הכרטיס צריך לעזור לו לבדוק האם המחשבה הזו נכונה, ולחשוב על הסבר אחר אפשרי.</div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">דוגמה מלאה</div>
+        <div class="step-title">ראו שיחה שלמה עם ה-AI</div>
+      </div>
+    </div>
+
+    <div class="screen-mockup">
+      <div class="screen-bar">
+        <div class="screen-dot" style="background:#FF5F56"></div>
+        <div class="screen-dot" style="background:#FEBC2E"></div>
+        <div class="screen-dot" style="background:#28C840"></div>
+        <div class="screen-url">gemini.google.com</div>
+      </div>
+      <div class="screen-body">
+        <div class="screen-input-label">👤 המורה כותבת:</div>
+        <div class="screen-input">אתה מומחה CBT. צור 6 כרטיסים לכיתה ה' על חרדת בחינות...</div>
+        <div class="screen-response-label">🤖 Gemini עונה:</div>
+        <div class="screen-response">כרטיס 1: "הקול הפנימי" — מה המחשבה שעולה לך כשאתה פותח דף בחינה? ...
+<br>כרטיס 2: "בחינת המציאות" — האם יצא לך לכשול לחלוטין בבחינה? מה למדת מזה? ...</div>
+        <div class="screen-input-label" style="margin-top:12px;">👤 המורה מגיבה:</div>
+        <div class="screen-input">כרטיס 2 טוב מאוד! אבל כרטיס 1 קצת מורכב. אנא פשט אותו.</div>
+        <div class="screen-response-label">🤖 Gemini עונה:</div>
+        <div class="screen-response">כרטיס 1 מחודש: "מה אני חושב?" — כשאתה יושב לפני בחינה, מה המשפט הראשון שעולה לך? האם המשפט הזה עוזר לך?</div>
+      </div>
+    </div>
+
+    <div class="box box-tip">
+      <div class="box-header"><span class="box-icon">💡</span><span class="box-title">שיטת 3 הסבבים</span></div>
+      <div class="box-content">
+        רוב הכרטיסים יגיעו לאיכות טובה אחרי <strong>3 סבבים</strong> מקסימום:<br><br>
+        <strong>סבב 1:</strong> שלחו את הפרומפט הבסיסי<br>
+        <strong>סבב 2:</strong> בקשו שיפור על 1-2 כרטיסים שפחות טובים<br>
+        <strong>סבב 3:</strong> בקשו את הכרטיסים הסופיים בפורמט נקי להדפסה
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(5)">→ חזרה</button>
+    <button class="btn-next" onclick="go(7)">המשך: שלב 6 ←</button>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================
+     PAGE 7: שלב 6 — הדפסה ושימוש
+================================================================ -->
+<div class="section" id="p7">
+<div class="content">
+  <div class="page-title">🖨️ שלב 6: מהמסך לכיתה</div>
+  <p class="page-intro">קיבלתם כרטיסים טובים — עכשיו נביא אותם לכיתה. שלושה מסלולים אפשריים.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">מסלול א'</div>
+        <div class="step-title">העתיקו לנייר Word — הפשוט ביותר</div>
+      </div>
+    </div>
+    <ol class="num-list">
+      <li>סמנו את הטקסט שקיבלתם מה-AI (Ctrl+A לסימון הכל)</li>
+      <li>העתיקו (Ctrl+C)</li>
+      <li>פתחו מסמך Word חדש</li>
+      <li>הדביקו (Ctrl+V)</li>
+      <li>שנו את הגופן ל-"David" ואת הגודל ל-18</li>
+      <li>הדפיסו וגזרו</li>
+    </ol>
+
+    <div class="box box-tip">
+      <div class="box-header"><span class="box-icon">✂️</span><span class="box-title">טיפ להדפסה</span></div>
+      <div class="box-content">
+        הדפיסו על נייר קרטון (לא נייר רגיל) — הכרטיסים יחזיקו מעמד הרבה יותר זמן.<br><br>
+        אם אין לכם מדפסת: שלחו לבית הדפוס הקרוב, או הדפיסו בבית הספר.
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">מסלול ב'</div>
+        <div class="step-title">בקשו מה-AI לעצב את הכרטיסים</div>
+      </div>
+    </div>
+    <p class="step-body">אחרי שאישרתם את התוכן, שלחו את הבקשה הזו:</p>
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">פרומפט לעיצוב</div><button class="copy-btn" onclick="copyText(this,'design1')">העתק</button></div>
+      <div class="prompt-text" id="design1">עכשיו ערוך את הכרטיסים בפורמט HTML שניתן להדפיס.
+כל כרטיס יהיה בתוך מסגרת מרובעת עם:
+- כותרת מודגשת למעלה
+- גוף הכרטיס (שאלה + השלמה) במרכז
+- גופן עברי ברור, גודל 18
+- 2 כרטיסים בשורה
+- כולל אפשרות הדפסה
+
+כן לעבד את כל 6 הכרטיסים שיצרנו.</div>
+    </div>
+
+    <div class="box box-warning">
+      <div class="box-header"><span class="box-icon">⚠️</span><span class="box-title">לא יצא טוב?</span></div>
+      <div class="box-content">
+        אם העיצוב לא יצא טוב — חזרו למסלול א' (Word). זה בסדר לחלוטין. המטרה היא הכרטיסים — לא העיצוב.
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <div class="step-title-group">
+        <div class="step-label">שימוש בכיתה</div>
+        <div class="step-title">כיצד להשתמש בכרטיסים</div>
+      </div>
+    </div>
+    <div class="workshop-check">
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">הניחו את הכרטיס על השולחן בצורה מזמינה — אל תכריחו אותו להגיב. הבחירה שלו.</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">קיימו שיחה של 5–10 דקות. לא צריך יותר — איכות על כמות.</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">הקשיבו לפני שאתם מגיבים. חזרו על מה ששמעתם.</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">סיימו עם צעד קטן: "מה דבר אחד שתנסה השבוע?"</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">גם בלי רקע ב-CBT — שאלות פתוחות טובות כבר עושות עבודה. תתחילו מכאן.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(6)">→ חזרה</button>
+    <button class="btn-next" onclick="go(8)">סיכום ותרגול ←</button>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================
+     PAGE 8: סיכום + תרגול
+================================================================ -->
+<div class="section" id="p8">
+<div class="content">
+  <div class="page-title">🎯 סיכום + תרגול עצמי</div>
+  <p class="page-intro">עברתם את כל השלבים. עכשיו — תרגול. אחרי 15 דקות תצאו עם כרטיסים מוכנים לכיתה.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">מה למדנו</div>
+        <div class="step-title">7 שלבים בסיכום של דקה</div>
+      </div>
+    </div>
+    <ol class="num-list">
+      <li><strong>כניסה לכלי</strong> — gemini.google.com או chatgpt.com</li>
+      <li><strong>פרומפט טוב</strong> = תפקיד + משימה + קהל + נושא/פורמט</li>
+      <li><strong>4 רכיבי CBT</strong>: שאלות פתוחות, זיהוי מחשבות, ראיות, חלופות</li>
+      <li><strong>העתקה מהמאגר</strong> — אל תמציאו, השתמשו בפרומפטים שכאן</li>
+      <li><strong>שיפור בסבבים</strong> — 2-3 סבבים עד לתוצאה מושלמת</li>
+      <li><strong>הדפסה</strong> — Word, HTML, או בית דפוס</li>
+      <li><strong>שימוש בכיתה</strong> — שיחה של 5-10 דקות, האזנה פעילה</li>
+    </ol>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">תרגול עצמי</div>
+        <div class="step-title">צרו את הכרטיסים שלכם עכשיו</div>
+      </div>
+    </div>
+
+    <div class="box box-tip">
+      <div class="box-header"><span class="box-icon">🚀</span><span class="box-title">המשימה שלכם</span></div>
+      <div class="box-content">
+        בחרו תלמיד אחד שאתם רוצים לעזור לו. בחרו נושא אחד (חברות / חרדה / כעסים). העתיקו את הפרומפט המתאים — ושנו את הפרטים בסוגריים לפי המצב הספציפי שלכם.<br><br>
+        <strong>יעד: 6 כרטיסים בפחות מ-15 דקות.</strong>
+      </div>
+    </div>
+
+    <div class="workshop-check">
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">✅ פתחתי את gemini.google.com / chatgpt.com</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">✅ העתקתי פרומפט מהמדריך ושיניתי את הפרטים שלי</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">✅ קיבלתי 6 כרטיסים מה-AI</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">✅ בדקתי: האם השאלות מבוססות CBT? (פתוחות, מכוונות לחשיבה)</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">✅ שיפרתי לפחות כרטיס אחד עם בקשה נוספת</div>
+      </div>
+      <div class="wc-item" onclick="toggleWC(this)">
+        <div class="wc-box"></div>
+        <div class="wc-text">✅ הדפסתי / שמרתי את הכרטיסים</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box box-cbt" style="margin-top:32px;">
+    <div class="box-header"><span class="box-icon">🧠</span><span class="box-title">רגע של רפלקציה</span></div>
+    <div class="box-content">
+      לפני שאתם עוזבים — שאלה אחת:<br><br>
+      <strong>"מה מחשבה אחת שעברה לכם בזמן הסדנה? האם זו מחשבה שעוזרת לכם לנסות?"</strong><br><br>
+      זוהי שאלת CBT. כן, בדיוק כמו שיצרתם לתלמידים — גם אנחנו עוברים אותה תהליך.
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(7)">→ חזרה</button>
+    <button class="btn-next" onclick="go(9)" style="background:#2D7A4F;">← 🗂️ מאגר כרטיסים משותף</button>
+  </div>
+</div>
+</div>
+
+
+<!-- ================================================================
+     PAGE 9: BONUS — מאגר כרטיסים משותף
+================================================================ -->
+<div class="section" id="p9">
+<div class="content">
+  <div class="page-title">🗂️ אופציה: מאגר כרטיסים משותף</div>
+  <p class="page-intro">אחרי שכל מורה יצר כרטיסים — אפשר לאגם אותם יחד ולבנות בנק כרטיסים של כל בית הספר. זו הדרך הכי מהירה לקבל ספרייה גדולה.</p>
+
+  <div class="box box-why">
+    <div class="box-header"><span class="box-icon">💡</span><span class="box-title">למה זה עובד?</span></div>
+    <div class="box-content">
+      10 מורים × 6 כרטיסים = <strong>60 כרטיסים שונים</strong> תוך שעה.<br><br>
+      כרטיסים שיצרה המחנכת לכיתה ג' יכולים לעזור לייעוצית עם כיתה ח'.<br>
+      כרטיסים על כעסים יכולים לעבוד גם לשיחות על חברות.<br><br>
+      <strong>המאגר שייך לכולם — וגדלה כל הזמן.</strong>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">אופציה א' — מהירה</div>
+        <div class="step-title">שיתוף בוואטסאפ — 2 דקות</div>
+      </div>
+    </div>
+    <div class="pool-option">
+      <div class="pool-icon">💬</div>
+      <div>
+        <div class="pool-badge">הכי פשוט</div>
+        <div class="pool-title">קבוצת ווטסאפ של הצוות</div>
+        <div class="pool-desc">כל מורה שולח לקבוצה <strong>כרטיס אחד</strong> שהוא הכי מרוצה ממנו — בפורמט קבוע:</div>
+        <div class="share-form">
+          📌 <strong>כרטיס חדש לבריכה</strong><br>
+          🎯 <strong>נושא:</strong> [קשיי חברות / חרדה / כעסים ...]<br>
+          👥 <strong>גיל מומלץ:</strong> [כיתה ד'-ו' / ...]<br>
+          📝 <strong>שם הכרטיס:</strong> "..."<br>
+          ❓ <strong>שאלה:</strong> "..."<br>
+          ✏️ <strong>השלמה:</strong> "..."
+        </div>
+      </div>
+    </div>
+
+    <div class="pool-option">
+      <div class="pool-icon">📋</div>
+      <div>
+        <div class="pool-badge">מומלץ</div>
+        <div class="pool-title">Google Forms + Google Sheets</div>
+        <div class="pool-desc">מנהל/ת הסדנה מכין/ה טופס Google Forms עם השדות:</div>
+        <div class="pool-steps">
+          • שמך<br>
+          • נושא הכרטיס<br>
+          • שם הכרטיס<br>
+          • השאלה<br>
+          • משפט ההשלמה<br>
+          • גיל מומלץ
+        </div>
+        <div class="pool-desc" style="margin-top:10px;">כל מורה ממלא/ת את הטופס בסוף הסדנה — התוצאות נאספות אוטומטית ב-Sheets.</div>
+      </div>
+    </div>
+
+    <div class="pool-option">
+      <div class="pool-icon">📄</div>
+      <div>
+        <div class="pool-badge opt">אופציה מעשית</div>
+        <div class="pool-title">Google Doc משותף</div>
+        <div class="pool-desc">מנהל/ת הסדנה יוצר/ת מסמך Google Doc משותף ומשתף/ת קישור עם כולם. כל מורה מדביק/ה את הכרטיסים שלו/ה ישירות למסמך.</div>
+        <div class="pool-desc" style="margin-top:8px;">יתרון: אפשר לארגן לפי נושאים ולחפש בטקסט.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">פעילות סיום</div>
+        <div class="step-title">5 דקות של שיתוף בקבוצה</div>
+      </div>
+    </div>
+
+    <p class="step-body">לסיום הסדנה — כל מורה קורא/ת <strong>כרטיס אחד בקול</strong>:</p>
+
+    <ol class="num-list">
+      <li>בחרו את הכרטיס שאתם הכי מרוצים ממנו</li>
+      <li>קראו את השאלה בקול לכולם</li>
+      <li>ספרו: לאיזה תלמיד ציירתם אותו בראש?</li>
+      <li>הדביקו אותו בגוגל דוק / שלחו לוואטסאפ</li>
+    </ol>
+
+    <div class="share-card">
+      <h3>🎯 בנק הכרטיסים של [שם בית הספר]</h3>
+      <p>בסוף כל סדנה נוסיפו לכאן את הכרטיסים שיצרתם. הבנק פתוח לכל הצוות — לחפש, לקחת, להשתמש.</p>
+      <div class="share-form">
+        📁 <strong>קטגוריות:</strong><br>
+        🤝 חברות ויחסים · 📝 חרדת בחינות · 😤 ניהול כעסים<br>
+        ⭐ כוחות ועצמי · 🔄 שיחות מעקב · 🌱 כרטיסים כלליים
+      </div>
+    </div>
+
+    <div class="box box-cbt">
+      <div class="box-header"><span class="box-icon">🧠</span><span class="box-title">CBT בצוות</span></div>
+      <div class="box-content">
+        שיתוף כרטיסים הוא עצמו חוויה של CBT:<br><br>
+        כשמורה שומע/ת כרטיס של עמית/ה — הוא/היא לפעמים אומר/ת: "זה בדיוק מה שהייתי צריך/ה אתמול."<br><br>
+        <strong>מאגר כרטיסים = קהילת תרגול.</strong> ככל שיש יותר כרטיסים — כולם עובדים טוב יותר.
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(8)">→ חזרה לסיכום</button>
+    <button class="btn-next" onclick="go(0)" style="background:#2D7A4F;">→ ✓ חזרה לתחילת המדריך</button>
+  </div>
+</div>
+</div>
+
+
+<!-- ================================================================
+     PAGE: אין לי רעיונות — בקשו מה-AI לעזור
+================================================================ -->
+<div class="section" id="p_ideas">
+<div class="content">
+  <div class="page-title">🤷 אין לי רעיונות — מה עכשיו?</div>
+  <p class="page-intro">לא יודעים על מה לבקש כרטיסים? לא בעיה — ה-AI יכול גם לעזור לכם <em>להחליט</em> מה לעשות. זהו אחד מהשימושים הכי שימושיים שלו.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title-group">
+        <div class="step-label">מצב א'</div>
+        <div class="step-title">אני לא יודע איזה נושא לבחור לכיתה שלי</div>
+      </div>
+    </div>
+    <p class="step-body">שאלו את ה-AI ישירות לרשימת רעיונות. הוא מכיר את ספרות CBT ויכול להציע נושאים שמתאימים לגיל:</p>
+
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">פרומפט לרשימת רעיונות</div><button class="copy-btn" onclick="copyText(this,'ideas1')">העתק</button></div>
+      <div class="prompt-text" id="ideas1">אני מורה לכיתה [ה' / ד' / ז' — בחרו]. תן לי רשימה של 10 נושאים נפוצים לכרטיסי שיחה CBT שמתאימים לגיל זה. לכל נושא — שתי משפטים: מה הנושא ולמה הוא רלוונטי.</div>
+    </div>
+
+    <div class="box box-example">
+      <div class="box-header"><span class="box-icon">📝</span><span class="box-title">דוגמה לתשובת AI</span></div>
+      <div class="box-content">
+        <strong>1. חרדת בחינות</strong> — נפוצה מאוד בכיתות ד'-ז'. כרטיסים יכולים לעזור לתלמידים לזהות מחשבות שליליות לפני בחינה ולפתח אסטרטגיות התמודדות.<br><br>
+        <strong>2. קשיי חברות ושייכות</strong> — בגיל זה השייכות לקבוצה קריטית. כרטיסים יעסקו בקנאה, ריב, ותחושת בדידות.<br><br>
+        <em>... ועוד 8 נושאים ...</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title-group">
+        <div class="step-label">מצב ב'</div>
+        <div class="step-title">יש לי תלמיד ספציפי — לא יודע איך לגשת אליו</div>
+      </div>
+    </div>
+    <p class="step-body">תארו את המצב בכלליות — <strong>בלי שם התלמיד</strong> — ובקשו המלצה על נושא ואפילו כרטיס ראשון:</p>
+
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">פרומפט למצב ספציפי</div><button class="copy-btn" onclick="copyText(this,'ideas2')">העתק</button></div>
+      <div class="prompt-text" id="ideas2">אני מורה. יש לי תלמיד/ה בכיתה [ה'] שמתקשה ב[ציינו בכלליות — למשל: "ניהול כעסים, מתמרמר/ת מהר ומתקשה להתנצל"].
+מה הנושא CBT המתאים ביותר לפתוח איתו/ה שיחה? ומה שאלת פתיחה אחת שאוכל להשתמש בה?</div>
+    </div>
+
+    <div class="box box-warning">
+      <div class="box-header"><span class="box-icon">⚠️</span><span class="box-title">שמרו על פרטיות</span></div>
+      <div class="box-content">
+        <strong>לעולם אל תכתבו שם של תלמיד לכלי AI.</strong><br><br>
+        תארו את המצב בכלליות: "תלמיד בן 10 שמתקשה ב..." — לא "דן מכיתה ה'3 שמתקשה ב..."<br><br>
+        ה-AI לא צריך את השם כדי לעזור — רק את ההקשר.
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <div class="step-title-group">
+        <div class="step-label">מצב ג'</div>
+        <div class="step-title">רוצה לגוון את הכרטיסים שיש לי כבר</div>
+      </div>
+    </div>
+
+    <div class="prompt-container">
+      <div class="prompt-header"><div class="prompt-label">פרומפט לגיוון</div><button class="copy-btn" onclick="copyText(this,'ideas3')">העתק</button></div>
+      <div class="prompt-text" id="ideas3">יש לי כבר כרטיסי שיחה על [נושא — למשל: כעסים]. אני רוצה להרחיב את אוסף הכרטיסים שלי. תן לי 5 זוויות CBT נוספות שאני עדיין לא כיסיתי — ולכל זווית שאלת פתיחה אחת.</div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(5)">→ חזרה לפרומפטים</button>
+    <button class="btn-next" onclick="go(6)">המשך: שיפור ועידון ←</button>
+  </div>
+</div>
+</div>
+
+
+<!-- ================================================================
+     PAGE: למה AI? יתרונות וחסרונות
+================================================================ -->
+<div class="section" id="p_why">
+<div class="content">
+  <div class="page-title">🤖 למה AI? — יתרונות וחסרונות</div>
+  <p class="page-intro">לפני שמשתמשים בכלי — כדאי להבין למה הוא טוב, ואיפה הוא לא מושלם. ידע זה יעזור לכם להשתמש בו נכון.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number" style="background:#1A5276;">🎯</div>
+      <div class="step-title-group">
+        <div class="step-label">הסבר</div>
+        <div class="step-title">למה AI ולא כלים אחרים?</div>
+      </div>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-card-vs">במקום חיפוש בגוגל</div>
+        <div class="why-card-title">AI <em>יוצר</em> — לא מחפש</div>
+        <div class="why-card-desc">גוגל ייתן לכם כרטיסים שמישהו אחר כבר כתב. AI יכתוב כרטיסים חדשים בדיוק לגיל, נושא וסגנון שאתם מבקשים.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-vs">במקום לקנות ערכות מוכנות</div>
+        <div class="why-card-title">בחינם ומותאם אישית</div>
+        <div class="why-card-desc">ערכות CBT מקצועיות עולות מאות שקלים ולא תמיד מתאימות לתרבות הישראלית. AI — חינמי ומתאים לכל בקשה.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-vs">במקום לכתוב לבד</div>
+        <div class="why-card-title">15 דקות במקום שעות</div>
+        <div class="why-card-desc">מורה מיומן יכתוב 6 כרטיסים CBT טובים תוך שעתיים. AI — תוך 15 דקות, כולל תיקונים.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-vs">במקום להעתיק מספר</div>
+        <div class="why-card-title">מותאם לתלמיד שלכם</div>
+        <div class="why-card-desc">ספר CBT לא יודע שהתלמיד שלכם בן 10 וחרדת הבחינות שלו קשורה להשוואה עם אחותו. AI מקבל את ההקשר שלכם.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">✅</div>
+      <div class="step-title-group">
+        <div class="step-label">הערכה כנה</div>
+        <div class="step-title">יתרונות וחסרונות — בכנות</div>
+      </div>
+    </div>
+
+    <div class="pc-grid">
+      <div class="pc-col pros">
+        <div class="pc-title">✓ יתרונות</div>
+        <div class="pc-item"><span class="pc-icon">⚡</span><span><strong>מהיר מאוד</strong> — 6 כרטיסים תוך דקות</span></div>
+        <div class="pc-item"><span class="pc-icon">🎯</span><span><strong>מותאם אישית</strong> — לגיל, נושא, שפה, הקשר</span></div>
+        <div class="pc-item"><span class="pc-icon">💸</span><span><strong>חינמי</strong> — Gemini ו-ChatGPT לא עולים כסף</span></div>
+        <div class="pc-item"><span class="pc-icon">🔄</span><span><strong>ניתן לשיפור מיידי</strong> — לא אוהבים תוצאה? בקשו שוב</span></div>
+        <div class="pc-item"><span class="pc-icon">📚</span><span><strong>יודע CBT</strong> — מכיר את הגישה ויכול ליישמה</span></div>
+        <div class="pc-item"><span class="pc-icon">🌍</span><span><strong>לכל נושא</strong> — חברות, חרדה, כעסים, משפחה...</span></div>
+      </div>
+      <div class="pc-col cons">
+        <div class="pc-title">✗ חסרונות</div>
+        <div class="pc-item"><span class="pc-icon">👁️</span><span><strong>חובה לבדוק</strong> — לא כל כרטיס מושלם. נדרשת עין של מורה</span></div>
+        <div class="pc-item"><span class="pc-icon">🌐</span><span><strong>צריך אינטרנט</strong> — לא עובד ללא חיבור</span></div>
+        <div class="pc-item"><span class="pc-icon">🏫</span><span><strong>לא מכיר את הכיתה שלכם</strong> — ההקשר האמיתי אצלכם בראש</span></div>
+        <div class="pc-item"><span class="pc-icon">🔒</span><span><strong>אל תשתפו פרטים אישיים</strong> — שמות תלמידים, מידע רגיש</span></div>
+        <div class="pc-item"><span class="pc-icon">📖</span><span><strong>לא מחליף הכשרה</strong> — CBT בידי מורה ללא הכשרה — עם הגבלות</span></div>
+        <div class="pc-item"><span class="pc-icon">🔤</span><span><strong>עברית — טובה אך לא מושלמת</strong> — לפעמים צריך לתקן ניסוח</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number">⚖️</div>
+      <div class="step-title-group">
+        <div class="step-label">המסקנה</div>
+        <div class="step-title">AI הוא כלי עזר — לא תחליף לשיפוט מקצועי</div>
+      </div>
+    </div>
+
+    <div class="box box-cbt">
+      <div class="box-header"><span class="box-icon">🧠</span><span class="box-title">חשוב להבין</span></div>
+      <div class="box-content">
+        AI ייצר כרטיסים <strong>טובים</strong> — אבל <strong>אתם</strong> תדעו אם הם מתאימים לתלמיד הספציפי שלכם.<br><br>
+        ה-AI לא ראה את הפנים של התלמיד, לא יודע על הבית שלו, לא הכיר אותו שלוש שנים.<br><br>
+        <strong>הנוסחה:</strong> AI מייצר ← אתם בוחרים ומתאימים ← ביחד יוצרים כלי טוב יותר ממה שכל אחד בנפרד.
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go(1)">→ חזרה להתחלה</button>
+    <button class="btn-next" onclick="go(2)">המשך: כניסה לכלי ←</button>
+  </div>
+</div>
+</div>
+
+
+<!-- ================================================================
+     PAGE: השוואת כלי AI — מה ההבדל בין הכלים?
+================================================================ -->
+<div class="section" id="p_tools">
+<div class="content">
+  <div class="page-title">🤖 מה ההבדל בין כלי ה-AI?</div>
+  <p class="page-intro">יש ארבעה כלים עיקריים — כולם חינמיים בגרסה הבסיסית, כולם יכולים לייצר כרטיסי CBT טובים. ההבדל הוא נוחות השימוש ויתרונות ייחודיים.</p>
+
+  <div class="tool-grid">
+
+    <div class="tool-card gemini">
+      <div class="tool-header">
+        <div class="tool-logo">🔵</div>
+        <div><div class="tool-name">Gemini</div><div class="tool-maker">של Google · gemini.google.com</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-best">⭐ הכי מומלץ למורים</div>
+        <div class="tool-desc">כניסה הכי פשוטה — אם יש לכם Gmail, אתם כבר בפנים. משולב עם Google Workspace.</div>
+        <ul class="tool-pros-list">
+          <li>כניסה אוטומטית עם Gmail</li>
+          <li>יכול לפתוח Google Docs ישירות</li>
+          <li>עברית טובה מאוד</li>
+          <li>חינמי ללא הגבלה</li>
+        </ul>
+        <div class="tool-note">💡 לאחר שה-AI יצר כרטיסים — אפשר לבקש: "פתח את זה ב-Google Docs"</div>
+      </div>
+    </div>
+
+    <div class="tool-card chatgpt">
+      <div class="tool-header">
+        <div class="tool-logo">🟢</div>
+        <div><div class="tool-name">ChatGPT</div><div class="tool-maker">של OpenAI · chatgpt.com</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-best">⭐ הכי מוכר בעולם</div>
+        <div class="tool-desc">הכלי הוותיק והנפוץ ביותר. GPT-4o הוא חזק מאוד לכתיבת תוכן מובנה ומפורט.</div>
+        <ul class="tool-pros-list">
+          <li>מעולה בפורמטים מובנים</li>
+          <li>זיכרון שיחה ארוך</li>
+          <li>יכול לייצא ל-Word</li>
+          <li>הרבה תיעוד ועזרה בעברית</li>
+        </ul>
+        <div class="tool-note">💡 בחרו "ChatGPT" ולא GPT-4 — הגרסה החינמית מספיקה לחלוטין</div>
+      </div>
+    </div>
+
+    <div class="tool-card claude">
+      <div class="tool-header">
+        <div class="tool-logo">🟡</div>
+        <div><div class="tool-name">Claude</div><div class="tool-maker">של Anthropic · claude.ai</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-best">⭐ הכי טוב לנושאים רגישים</div>
+        <div class="tool-desc">מיוחד בנושאים עדינים ורגשיים — CBT, תמיכה נפשית, שיחות קשות. מתאים במיוחד לכרטיסי שיחה.</div>
+        <ul class="tool-pros-list">
+          <li>שפה עדינה ורגישה יותר</li>
+          <li>מבין הקשרים מורכבים</li>
+          <li>פחות סיכוי לתוכן לא מתאים</li>
+          <li>הוראות ארוכות ומורכבות — מעולה</li>
+        </ul>
+        <div class="tool-note">💡 אם הנושא רגיש במיוחד — נסו Claude. הוא הכי זהיר.</div>
+      </div>
+    </div>
+
+    <div class="tool-card copilot">
+      <div class="tool-header">
+        <div class="tool-logo">🟣</div>
+        <div><div class="tool-name">Copilot</div><div class="tool-maker">של Microsoft · copilot.microsoft.com</div></div>
+      </div>
+      <div class="tool-body">
+        <div class="tool-best">⭐ הכי טוב למשתמשי Office</div>
+        <div class="tool-desc">משולב עם Word, Outlook ו-Teams. אם בית הספר שלכם עובד עם Microsoft 365 — זהו הכלי הנוח ביותר.</div>
+        <ul class="tool-pros-list">
+          <li>פתוח ישירות מ-Word</li>
+          <li>משולב עם Microsoft 365</li>
+          <li>כניסה עם חשבון אוניברסיטה/משרד</li>
+          <li>שמירה ישירה ל-OneDrive</li>
+        </ul>
+        <div class="tool-note">💡 אם יש לכם כתובת מייל של בית הספר — בדקו אם Copilot כלול בחינם</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="box box-tip">
+    <div class="box-header"><span class="box-icon">🎯</span><span class="box-title">המלצה פרקטית</span></div>
+    <div class="box-content">
+      <strong>מתחילים?</strong> → התחילו עם <strong>Gemini</strong> (Gmail = כניסה אוטומטית)<br><br>
+      <strong>רוצים את הכי חזק?</strong> → <strong>ChatGPT</strong> עם פרומפטים מהמדריך הזה<br><br>
+      <strong>נושא רגיש?</strong> → <strong>Claude</strong> — הכי עדין ומדויק לנושאי רגש<br><br>
+      <strong>בית ספר Microsoft?</strong> → <strong>Copilot</strong> — ישירות מ-Word
+    </div>
+  </div>
+
+  <div class="box box-why">
+    <div class="box-header"><span class="box-icon">💡</span><span class="box-title">בסופו של דבר</span></div>
+    <div class="box-content">
+      הפרומפט חשוב יותר מהכלי. פרומפט טוב ב-Gemini יתן תוצאה טובה יותר מפרומפט גרוע ב-ChatGPT. השקיעו בפרומפט — לא בבחירת הכלי.
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go('p_why')">→ חזרה ליתרונות וחסרונות</button>
+    <button class="btn-next" onclick="go(2)">המשך: שלב 1 ←</button>
+  </div>
+</div>
+</div>
+
+
+<!-- ================================================================
+     PAGE: כלים דיגיטליים לשימוש בכרטיסים
+================================================================ -->
+<div class="section" id="p_online">
+<div class="content">
+  <div class="page-title">📱 להשתמש בכרטיסים — דיגיטלית</div>
+  <p class="page-intro">לאחר שיצרתם כרטיסים עם AI — אפשר להשתמש בהם לא רק מודפסים. יש כלים שמאפשרים להציג כרטיסים כאפליקציה, לשתף עם תלמידים, ואפילו לשחק בהם.</p>
+
+  <div class="step-section">
+    <div class="step-header">
+      <div class="step-number" style="background:#5B4A8C;">📲</div>
+      <div class="step-title-group">
+        <div class="step-label">כלים מומלצים</div>
+        <div class="step-title">5 דרכים לקחת את הכרטיסים לדיגיטל</div>
+      </div>
+    </div>
+
+    <div class="online-tool">
+      <div class="online-tool-icon">🃏</div>
+      <div>
+        <div class="online-tool-type"><span class="tool-badge-free">חינמי</span>כרטיסיות דיגיטליות</div>
+        <div class="online-tool-name">Quizlet — quizlet.com</div>
+        <div class="online-tool-desc">פלטפורמת הכרטיסיות הנפוצה בעולם. אפשר להכניס שאלה בצד אחד ותשובה/השלמה בצד השני. הכרטיסים מוצגים אחד אחד — בדיוק כמו כרטיס פיזי.</div>
+        <div class="online-tool-steps">
+          1. כנסו ל-quizlet.com → "Create a Study Set"<br>
+          2. הכניסו כל כרטיס: שאלה בצד, השלמה בצד<br>
+          3. שלחו לתלמידים קישור — הם משחקים לבד<br>
+          4. ✓ עובד בנייד, בטאבלט, במחשב
+        </div>
+      </div>
+    </div>
+
+    <div class="online-tool">
+      <div class="online-tool-icon">📊</div>
+      <div>
+        <div class="online-tool-type"><span class="tool-badge-free">חינמי</span>כרטיסים מ-Google Sheets</div>
+        <div class="online-tool-name">Flippity — flippity.net</div>
+        <div class="online-tool-desc">העתיקו כרטיסים ל-Google Sheets (עמודה א: שאלה, עמודה ב: השלמה) → ו-Flippity הופך אותם אוטומטית לאפליקציית כרטיסים עם עיצוב יפה.</div>
+        <div class="online-tool-steps">
+          1. פתחו Google Sheets חדש<br>
+          2. עמודה A: שאלות | עמודה B: השלמות<br>
+          3. כנסו ל-flippity.net/fc → הכניסו קישור ל-Sheets<br>
+          4. ✓ מקבלים אפליקציה מוכנה לשיתוף
+        </div>
+      </div>
+    </div>
+
+    <div class="online-tool">
+      <div class="online-tool-icon">🎨</div>
+      <div>
+        <div class="online-tool-type"><span class="tool-badge-free">חינמי (עם תשלום)</span>עיצוב ושיתוף</div>
+        <div class="online-tool-name">Canva — canva.com</div>
+        <div class="online-tool-desc">עצבו את הכרטיסים עם תמונות יפות, ואז שתפו כ-Canva "Presentation" — כל כרטיס = שקופית. אפשר לקרוא בכיתה על מסך.</div>
+        <div class="online-tool-steps">
+          1. חפשו Template: "Flashcard" או "Card"<br>
+          2. הכניסו את הכרטיסים — כל כרטיס שקופית<br>
+          3. שתפו קישור לכיתה<br>
+          4. ✓ הכי יפה ויזואלית
+        </div>
+      </div>
+    </div>
+
+    <div class="online-tool">
+      <div class="online-tool-icon">📝</div>
+      <div>
+        <div class="online-tool-type"><span class="tool-badge-free">חינמי</span>קיר שיתופי</div>
+        <div class="online-tool-name">Padlet — padlet.com</div>
+        <div class="online-tool-desc">כרטיסים כ"פתקיות" דיגיטליות על קיר משותף. תלמידים יכולים לראות ולהוסיף. מתאים לפעילות קבוצתית — כל תלמיד בוחר כרטיס ומגיב.</div>
+        <div class="online-tool-steps">
+          1. צרו Padlet חדש → בחרו "Wall"<br>
+          2. הוסיפו כרטיס לכל פתקית<br>
+          3. שתפו עם התלמידים<br>
+          4. ✓ אינטראקטיבי — תלמידים יכולים להגיב
+        </div>
+      </div>
+    </div>
+
+    <div class="online-tool">
+      <div class="online-tool-icon">🎮</div>
+      <div>
+        <div class="online-tool-type"><span class="tool-badge-free">חינמי</span>גמיפיקציה</div>
+        <div class="online-tool-name">Mentimeter — mentimeter.com</div>
+        <div class="online-tool-desc">הציגו כרטיס בפני הכיתה כולה — תלמידים עונים מהנייד שלהם. מתאים להצגה קבוצתית ולדיון משותף, לא לשיחה אישית.</div>
+        <div class="online-tool-steps">
+          1. צרו שאלה חדשה → בחרו "Open Ended"<br>
+          2. הכניסו שאלת CBT<br>
+          3. הציגו על מסך → תלמידים מקלידים תשובות<br>
+          4. ✓ תשובות אנונימיות — עוזר לפתיחות
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box box-cbt">
+    <div class="box-header"><span class="box-icon">🧠</span><span class="box-title">דיגיטלי מול פיזי — מה עדיף?</span></div>
+    <div class="box-content">
+      <strong>כרטיס פיזי:</strong> מתאים לשיחה אישית אחד-על-אחד. מניחים על שולחן, אין מסך מפריע, מרגיש אינטימי יותר.<br><br>
+      <strong>כלי דיגיטלי:</strong> מתאים לכיתה שלמה, לשיתוף מרחוק, לתלמידים ביישנים שמעדיפים לכתוב מאשר לדבר.<br><br>
+      <strong>המלצה:</strong> התחילו עם כרטיסים פיזיים לשיחות אישיות. השתמשו בדיגיטלי לפעילויות כיתתיות.
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="go('p_why')">→ חזרה ליתרונות</button>
+    <button class="btn-next" onclick="go(8)">המשך לסיכום ←</button>
+  </div>
+</div>
+</div>
+
+<script>
+const PAGES = 10;
+let current = 0;
+
+// Navigation tabs built in HTML above
+
+function go(n){ navTo(n); }
+function navTo(n, label){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const targetId = (typeof n === 'string' && n.startsWith('p_')) ? n : 'p'+n;
+  const target = document.getElementById(targetId);
+  if(target) target.classList.add('active');
+  // Update nav tabs
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.remove('active');
+    if(label && t.textContent.trim() === label) t.classList.add('active');
+  });
+  window.scrollTo(0, 0);
+}
+
+function copyText(btn, id){
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ הועתק!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function toggleWC(item){
+  item.classList.toggle('done');
+  const box = item.querySelector('.wc-box');
+  box.textContent = item.classList.contains('done') ? '✓' : '';
+}
+</script>
+</body>
+</html>

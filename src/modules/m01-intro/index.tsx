@@ -2,7 +2,7 @@
 // Entry point: section navigation + section rendering
 import React, { useState } from 'react';
 import ModuleShell from '@/components/layout/ModuleShell/ModuleShell';
-import { m01Config } from '@/modules/moduleConfigs';
+import { m01Config } from '../moduleConfigs';
 import M01Opening from './sections/M01Opening';
 import M01Theory from './sections/M01Theory';
 import M01ReverseEng from './sections/M01ReverseEng';

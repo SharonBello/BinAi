@@ -1,7 +1,7 @@
 import React from 'react';
 import { TbCertificate, TbStar, TbDownload, TbBulb } from 'react-icons/tb';
 import ModuleCard from '@/components/portal/ModuleCard/ModuleCard';
-import { ALL_MODULES, CLUSTERS } from '@/modules/moduleConfigs';
+import { ALL_MODULES, CLUSTERS } from '../../modules/moduleConfigs';
 import type { ModuleCluster } from '@/types/module.types';
 import styles from './PortalHome.module.scss';
 
