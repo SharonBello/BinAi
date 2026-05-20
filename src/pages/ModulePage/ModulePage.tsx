@@ -9,6 +9,8 @@ const MODULE_MAP: Record<string, React.LazyExoticComponent<React.FC>> = {
   m03: lazy(() => import('@/modules/m03-pedagogical-spoiler')),
   m04: lazy(() => import('@/modules/m04-three-moves')),
   m05: lazy(() => import('@/modules/m05-creative-thinking')),
+  m06: lazy(() => import('@/modules/m06-metacognition')),
+  m07: lazy(() => import('@/modules/m07-nvc-communication')),
 };
 
 const LoadingScreen = () => (
