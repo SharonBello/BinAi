@@ -116,7 +116,7 @@ export const m08Config: ModuleConfig = {
   tagsHe:['אזורי ויסות','ויסות רגשי','SEL'],
   openingQuestionHe:'איפה אתה/ת ב"אזורים" כרגע? ולמה?',
   artifactNameHe:'ערכת ויסות לכיתה',
-  imageUrl: img('m08'), isAvailable:false,
+  imageUrl: img('m08'), isAvailable:true,
   sections:[{id:'opening',titleHe:'פתיחה',startMin:0,endMin:15,type:'opening'},{id:'theory',titleHe:'תיאוריה',startMin:15,endMin:45,type:'theory'},{id:'reverse',titleHe:'בלש הפרומפטים',startMin:45,endMin:70,type:'reverseEng'},{id:'break',titleHe:'הפסקה',startMin:70,endMin:85,type:'break'},{id:'practice',titleHe:'תרגול',startMin:85,endMin:115,type:'practice'},{id:'shared',titleHe:'שיתוף',startMin:115,endMin:145,type:'shared'},{id:'quiz',titleHe:'בחינון',startMin:145,endMin:165,type:'quiz'},{id:'closing',titleHe:'סיכום',startMin:165,endMin:180,type:'closing'}],
 };
 

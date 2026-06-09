@@ -11,6 +11,7 @@ const MODULE_MAP: Record<string, React.LazyExoticComponent<React.FC>> = {
   m05: lazy(() => import('@/modules/m05-creative-thinking')),
   m06: lazy(() => import('@/modules/m06-metacognition')),
   m07: lazy(() => import('@/modules/m07-nvc-communication')),
+  m08: lazy(() => import('@/modules/m08-zones-of-regulation')),
 };
 
 const LoadingScreen = () => (
